@@ -6,6 +6,13 @@
 {% include "search/searchbox.html" %}
 
 <p><small>{{ hitCount }} result{% if hitCount != 1 %}s{% endif %} in {{ took }}s</small></p>
+
+{% if suggestion %}
+{% autoescape off %}
+<p>Did you mean: <a href="/search/?q={{ suggestion|urlencode }}">{{ suggestion_html }}</a></p>
+{% endautoescape %}
+{% endif %}
+
 {% for article in articles %}
   {% include "article/article.html" %}
 {% endfor %}
