@@ -1,7 +1,12 @@
 <form action="/search" method="GET" role="search" id="searchForm">
   <div class="input-group input-group-lg">
-    <input name="q" type="text" class="form-control" id="searchInput" aria-autocomplete="both" aria-haspopup="false" autocapitalize="off" autocomplete="off" autocorrect="off" autofocus="" role="combobox" spellcheck="false" title="Search" value="" aria-label="Search" placeholder="Search ..." value="" required="" />
+    <input name="q" type="text" class="form-control" id="searchInput" aria-autocomplete="both" aria-haspopup="false" autocapitalize="off" autocomplete="off" autofocus="" autocorrect="off" role="combobox" spellcheck="false" title="Search" aria-label="Search" placeholder="Search ..." value="{{ queryString }}" required="" />
     <button class="btn btn-outline-secondary" type="submit">&#x1F50E;</button>
   </div>
 </form>
+<script>
+  let searchInput = document.getElementById('searchInput');
+  let length = searchInput.value.length;
+  searchInput.setSelectionRange(length, length);
+</script>
 {% include "search/suggestions.html" %}

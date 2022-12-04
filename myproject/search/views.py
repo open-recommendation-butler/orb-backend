@@ -1,20 +1,28 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from elasticsearch import Elasticsearch
+from elasticsearch_dsl import Search
+from article.documents import Article
 
 def search(request):
-  context= {
-    "articles": [
-      {
-        "title": "Django’s role in forms",
-        "teaser": "Vor einem Jahr, am 8. Dezember 2021, endete die Kanzlerschaft von Angela Merkel. Lange galt sie als umsichtige Krisenkanzlerin,..."
-      },
-      {
-        "title": "Short Message Service: Merkels geliebter Kurznachrichtendienst, die SMS, wird 30",
-        "teaser": "Mit Angela Merkel hat die prominenteste Verfasserin von SMS die politische Bühne verlassen. Als Bundeskanzlerin hat sie immer per SMS..."
-      },
-      {
-        "title": "Glosse: Wie Markus Söder in Retzstadt die Merkel-Transformation begonnen hat",
-        "teaser": "Dorfladeneröffnung und Weihnachtspostfiliale haben den Ministerpräsidenten nach Main-Spessart gelockt. Unser Autor deutet seinen Auftritt..."
-      }
-    ]
+  print("request.GET.get('q')", request.GET.get('q'))
+  queryString = request.GET.get('q')
+
+  # Return to index page if query is empty
+  if not queryString:
+    return redirect('index')
+
+  query = Article.search().query(
+    "multi_match", 
+    query=queryString, 
+    fields=['title', 'teaser', 'fulltext'],
+    fuzziness="AUTO"
+  )
+  response = query.execute()
+  print(response.to_dict())
+  context = {
+    "articles": query, 
+    "queryString": queryString, 
+    "took": response.took / 1000, 
+    "hitCount": response.hits.total.value
   }
   return render(request, 'search/results.html', context)

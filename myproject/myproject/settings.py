@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "article",
+    "rest_framework",
     "index",
     "search",
 ]
@@ -124,3 +125,14 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+ELASTICSEARCH_DSL={
+    'default': {
+        'hosts': 'localhost:9200',
+        'timeout': 120
+    },
+}
+
+from elasticsearch_dsl import connections
+
+connections.create_connection(hosts=['localhost'], timeout=20)

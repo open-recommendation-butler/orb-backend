@@ -1,11 +1,11 @@
 {% extends "index/base.html" %}
 
-{% block title %}{{ section.title }}{% endblock %}
+{% block title %}Search for: {{ queryString }}{% endblock %}
 
 {% block content %}
 {% include "search/searchbox.html" %}
-<h1>{{ section.title }}</h1>
 
+<p><small>{{ hitCount }} result{% if hitCount != 1 %}s{% endif %} in {{ took }}s</small></p>
 {% for article in articles %}
   {% include "article/article.html" %}
 {% endfor %}
