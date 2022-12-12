@@ -6,6 +6,7 @@ from article.documents import Article
 def search(request):
   print("request.GET.get('q')", request.GET.get('q'))
   queryString = request.GET.get('q')
+  content_type = request.GET.get('content_type', 'article')
 
   # Return to index page if query is empty
   if not queryString:
@@ -15,8 +16,9 @@ def search(request):
     "multi_match", 
     query=queryString, 
     fields=['title', 'teaser', 'fulltext'],
-    fuzziness="AUTO"
-  ).query('match', requires_bib=True)
+    fuzziness="AUTO",
+  ).filter('term', content_type=content_type)
+  #.query('match', requires_bib=True)
   response = query.execute()
   print(response.to_dict())
 
@@ -47,6 +49,7 @@ def search(request):
     "took": (response.took + suggestResponse.took) / 1000, 
     "hitCount": response.hits.total.value,
     "suggestion": suggestion,
-    "suggestion_html": suggestion_html
+    "suggestion_html": suggestion_html,
+    "content_type": content_type
   }
   return render(request, 'search/results.html', context)

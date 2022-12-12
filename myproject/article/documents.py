@@ -27,8 +27,8 @@ class Article(Document):
   is_news_agency = Boolean()
   embedding = DenseVector(
     dims=768,
-    index=True,
-    similarity="dot_product"
+    #index=True,
+    #similarity="dot_product"
   )
 
   class Index:
