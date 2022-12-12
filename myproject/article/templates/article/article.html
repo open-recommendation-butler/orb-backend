@@ -1,4 +1,10 @@
+{% load humanize %}
+
 <div>
-  <h4>{{ article.title }}</h4>
-  <p>{{ article.teaser }}</p>
+  <a href="{{ article.url }}" class="text-black text-decoration-none">
+    <p class="mb-1"><small>{{ article.portal }} | {{ article.rubrik|default:"Sonstige" }}</small></p>
+    <h4>{{ article.title }}</h4>
+    <p class="mb-1">{% if article.teaser %}{{ article.teaser }}{% else %}{{ article.fulltext|truncatewords:8 }}{% endif %}</p>
+    <p class="text-muted"><small>{{ article.created|naturalday|capfirst }}, {{ article.word_count|intcomma }} words</small></p>
+  </a>
 </div>

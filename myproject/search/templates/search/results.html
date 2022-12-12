@@ -5,7 +5,7 @@
 {% block content %}
 {% include "search/searchbox.html" %}
 
-<p><small>{{ hitCount }} result{% if hitCount != 1 %}s{% endif %} in {{ took }}s</small></p>
+<p class="mt-1"><i><small>{{ hitCount }} result{% if hitCount != 1 %}s{% endif %} in {{ took }}s</small></i></p>
 
 {% if suggestion %}
 {% autoescape off %}
@@ -13,17 +13,25 @@
 {% endautoescape %}
 {% endif %}
 
+<div class="pt-3">
 {% for article in articles %}
   {% include "article/article.html" %}
+{% empty %}
+  <p class="h5">There were no documents found for your query: <b>{{ queryString }}</b></p>
+  <p class="h6 mb-1">Tips:</p>
+  <p class="h mb-0">- Make sure that all words are spelled correctly.</p>
+  <p class="h mb-0">- Try other search terms.</p>
+  <p class="h mb-0">- Try more general search terms.</p>
 {% endfor %}
-<nav aria-label="...">
+</div>
+<nav aria-label="..." class="pt-4">
   <ul class="pagination">
     <li class="page-item disabled">
       <span class="page-link">Previous</span>
     </li>
-    <li class="page-item"><a class="page-link" href="#">1</a></li>
-    <li class="page-item active" aria-current="page">
-      <span class="page-link">2</span>
+    <li class="page-item active"><span class="page-link">1</span>
+    <li class="page-item" aria-current="page">
+      <a class="page-link" href="#">2</a></li>
     </li>
     <li class="page-item"><a class="page-link" href="#">3</a></li>
     <li class="page-item">

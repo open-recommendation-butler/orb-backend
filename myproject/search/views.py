@@ -16,7 +16,7 @@ def search(request):
     query=queryString, 
     fields=['title', 'teaser', 'fulltext'],
     fuzziness="AUTO"
-  )
+  ).query('match', requires_bib=True)
   response = query.execute()
   print(response.to_dict())
 
@@ -36,7 +36,7 @@ def search(request):
 
   suggestion = " ".join(suggestion)
   suggestion_html = " ".join(suggestion_html)
-  if suggestion == queryString:
+  if suggestion.lower() == queryString.lower():
     suggestion = None
     suggestion_html = None
 
