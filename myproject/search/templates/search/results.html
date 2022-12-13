@@ -33,16 +33,12 @@
 </div>
 <nav aria-label="..." class="pt-4">
   <ul class="pagination">
-    <li class="page-item disabled">
-      <span class="page-link">Previous</span>
+    <li class="page-item {% if page == 1 %}disabled{% endif %}">
+      <a class="page-link" href="/search/?q={{ queryString|urlencode }}&content_type={{ content_type }}&page={{ page|add:'-1' }}">Previous</a>
     </li>
-    <li class="page-item active"><span class="page-link">1</span>
-    <li class="page-item" aria-current="page">
-      <a class="page-link" href="#">2</a></li>
-    </li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li>
-    <li class="page-item">
-      <a class="page-link" href="#">Next</a>
+    <li class="page-item disabled"><span class="page-link">Page {{ page }} / {{ pageCount }}</span></li>
+    <li class="page-item {% if page == pageCount %}disabled{% endif %}">
+      <a class="page-link" href="/search/?q={{ queryString|urlencode }}&content_type={{ content_type }}&page={{ page|add:'1' }}">Next</a>
     </li>
   </ul>
 </nav>

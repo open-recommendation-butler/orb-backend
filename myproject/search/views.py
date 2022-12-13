@@ -1,24 +1,35 @@
 from django.shortcuts import render, redirect
-from elasticsearch import Elasticsearch
-from elasticsearch_dsl import Search
+from elasticsearch_dsl import Q
 from article.documents import Article
+import math
 
 def search(request):
   print("request.GET.get('q')", request.GET.get('q'))
   queryString = request.GET.get('q')
   content_type = request.GET.get('content_type', 'article')
+  page = request.GET.get('page', 1)
+  page = int(page)
 
   # Return to index page if query is empty
   if not queryString:
     return redirect('index')
 
-  query = Article.search().query(
-    "multi_match", 
-    query=queryString, 
-    fields=['title', 'teaser', 'fulltext'],
-    fuzziness="AUTO",
-  ).filter('term', content_type=content_type)
-  #.query('match', requires_bib=True)
+  query = Article.search()
+  # .query(
+  #   "multi_match", 
+  #   query=queryString, 
+  #   fields=['title', 'teaser', 'fulltext'],
+  #   fuzziness="AUTO"
+  # ).filter('term', content_type=content_type)
+  query = query.query(
+    'bool', 
+    must=[
+      Q('multi_match', query=queryString, fields=['title', 'teaser', 'fulltext'], fuzziness="AUTO"),
+      Q('term', content_type=content_type)
+    ],
+    should=[Q('match', is_paid=True), Q('match', is_news_agency=False)]
+  )
+  query = query[(page-1)*10:page*10]
   response = query.execute()
   print(response.to_dict())
 
@@ -50,6 +61,8 @@ def search(request):
     "hitCount": response.hits.total.value,
     "suggestion": suggestion,
     "suggestion_html": suggestion_html,
-    "content_type": content_type
+    "content_type": content_type,
+    "page": page,
+    "pageCount": math.ceil(response.hits.total.value / 10)
   }
   return render(request, 'search/results.html', context)
