@@ -34,7 +34,7 @@ def search(request):
     'bool', 
     must=[
       Q('multi_match', query=queryString, fields=['title', 'teaser', 'fulltext'], fuzziness="AUTO"),
-      Q('term', content_type=content_type)
+      #Q('term', content_type=content_type)
     ],
     should=[Q('match', is_paid=True), Q('match', is_news_agency=False)]
   )
