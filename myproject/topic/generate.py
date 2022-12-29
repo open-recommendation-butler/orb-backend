@@ -17,19 +17,17 @@ def find_topic_recursive(article, articles):
       continue
     sim = cosine_sim(article.embedding, other_article.embedding)
     if sim > 0.4:
-      topic.append(other_article)
       topic.extend(find_topic_recursive(other_article, articles))
   return topic
 
 def generate():
-  print('start')
   query = Article.search()
   query = query.query('match_all')
+  response = query.execute()
 
   articles = []
   # Convert article embeddings to numpy arrays
   for article in query.scan():
-    print(article.meta.id)
     article.embedding = np.array(article.embedding)
     articles.append(article)
   
@@ -39,19 +37,6 @@ def generate():
     if article.meta.id in already_clustered_articles:
       continue
     topics.append(find_topic_recursive(article, articles))
-  
-  for i, topic in enumerate(topics):
-    print()
-    print('::::::::::::::::::::::::::::::::::::')
-    print(f"TOPIC {i}")
-    print('::::::::::::::::::::::::::::::::::::')
-    for ii, article in enumerate(topic):
-      print(f"ARTICLE {ii}")
-      print(article.title)
-      print('_')
-      print(article.teaser)
-      print('_')
-      print(article.url)
-      print(article.meta.id)
+
 
   return
