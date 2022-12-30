@@ -18,9 +18,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
-
+import os
 # SECURITY WARNING: keep the secret key used in production secret!
-from .local_settings import *
+SECRET_KEY = os.environ.get("SECRET_KEY", '9bxo1&_zq)txnin$e%#-k5moyd(om9wr66@v&71$6m+w$=7anm')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -138,8 +138,8 @@ ELASTICSEARCH_DSL={
 from elasticsearch_dsl import connections
 
 connections.create_connection(
-    hosts=ELASTIC_HOSTS, 
+    hosts=['https://localhost:9200'], 
     timeout=60, 
-    ca_certs=ELASTIC_CA_CERTS_LOCATION, 
-    basic_auth=("elastic", ELASTIC_PASSWORD)
+    ca_certs=os.environ.get("xpack.security.http.ssl.certificate"), 
+    basic_auth=("elastic", os.environ.get("ELASTIC_PASSWORD"))
 )
