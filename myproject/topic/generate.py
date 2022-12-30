@@ -1,12 +1,14 @@
 from article.documents import Article
 import numpy as np
 from numpy.linalg import norm
+from .models import Topic
 
 def cosine_sim(a, b):
   return np.dot(a, b)/(norm(a) * norm(b))
 
-def find_topic_recursive(article, articles, already_clustered_articles):
-  topic = [article]
+def sort_in_topics_recursion(article, articles, already_clustered_articles):
+  t = Topic()
+  t.articles.append(article)
   already_clustered_articles.add(article.meta.id)
 
   for other_article in articles:
@@ -22,13 +24,13 @@ def find_topic_recursive(article, articles, already_clustered_articles):
     if sim > 0.5:
 
       # Find further similar articles
-      t, already_clustered_articles = find_topic_recursive(other_article, articles, already_clustered_articles)
-      topic.extend(t)
+      other_t, already_clustered_articles = sort_in_topics_recursion(other_article, articles, already_clustered_articles)
+      t.articles.extend(other_t.articles)
 
-  return topic, already_clustered_articles
+  return t, already_clustered_articles
 
   
-def generate(articles):
+def sort_in_topics(articles):
   topics = []
 
   # Collect all already clustered articles in a set
@@ -45,8 +47,8 @@ def generate(articles):
     if article.meta.id in already_clustered_articles:
       continue
 
-    topic, already_clustered_articles = find_topic_recursive(article, articles, already_clustered_articles)
-    topics.append(topic)
+    t, already_clustered_articles = sort_in_topics_recursion(article, articles, already_clustered_articles)
+    topics.append(t)
 
   return topics
 
