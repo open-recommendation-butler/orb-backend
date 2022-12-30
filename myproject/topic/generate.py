@@ -25,7 +25,7 @@ def find_topic_recursive(article, articles, already_clustered_articles):
       t, already_clustered_articles = find_topic_recursive(other_article, articles, already_clustered_articles)
       topic.extend(t)
 
-  return topic
+  return topic, already_clustered_articles
 
   
 def generate(articles):
