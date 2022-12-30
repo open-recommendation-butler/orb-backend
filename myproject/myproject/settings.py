@@ -10,17 +10,23 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import environ
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Access Environment Varaibles with django-environ
+env = environ.Env()
+environ.Env.read_env(os.path.join(Path(BASE_DIR).parent, '.env'))
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
-import os
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY", '9bxo1&_zq)txnin$e%#-k5moyd(om9wr66@v&71$6m+w$=7anm')
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -140,6 +146,6 @@ from elasticsearch_dsl import connections
 connections.create_connection(
     hosts=['https://localhost:9200'], 
     timeout=60, 
-    ca_certs=os.environ.get("xpack.security.http.ssl.certificate"), 
-    basic_auth=("elastic", os.environ.get("ELASTIC_PASSWORD"))
+    ca_certs=env("xpack_security_http_ssl_certificate"), 
+    basic_auth=("elastic", env("ELASTIC_PASSWORD"))
 )
