@@ -5,6 +5,6 @@
     <p class="mb-1"><small>{{ article.portal }} | {{ article.rubrik|default:"Sonstige" }}</small></p>
     <h4>{{ article.title }}</h4>
     <p class="mb-1">{% if article.is_paid %}🔒 {% endif %}{% if article.teaser %}{{ article.teaser }}{% else %}{{ article.fulltext|truncatewords:8 }}{% endif %}</p>
-    <p class="text-muted"><small>{{ article.created|naturalday|capfirst }}, {{ article.word_count|intcomma }} words</small></p>
+    <p class="text-muted"><small>{{ article.created|naturalday|capfirst }}{% if article.word_count %}, {{ article.word_count|intcomma }} words{% endif %}</small></p>
   </a>
 </div>

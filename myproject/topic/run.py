@@ -1,3 +1,4 @@
-from topic.generate import generate
+from topic.generate import generate, generate_for_all_articles
 
-generate()
+topics = generate_for_all_articles()
+print(topics)

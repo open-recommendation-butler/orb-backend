@@ -1,0 +1,15 @@
+<div>
+  {% if topic.articles|length_is:"1" %}
+    {% include "article/article.html" with article=topic.articles.0 %}
+  {% else %}
+    <h5 class="mb-3">Thema:</h5>
+    <div class="row row-cols-2">
+      {% for article in topic.articles %}
+        <div class="col">
+          {% include "article/article.html" %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  <hr />
+</div>

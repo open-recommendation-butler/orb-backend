@@ -21,8 +21,12 @@
 {% endif %}
 
 <div class="pt-4">
-{% for article in articles %}
-  {% include "article/article.html" %}
+{% for item in content %}
+  {% if item.articles %}
+    {% include "topic/topic.html" with topic=item %}
+  {% else %}
+    {% include "article/article.html" with article=item %}
+  {% endif %}
 {% empty %}
   <p class="h5">There were no documents found for your query: <b>{{ queryString }}</b></p>
   <p class="h6 mb-1">Tips:</p>
