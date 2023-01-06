@@ -15,7 +15,7 @@ You can start ORB on your machine with docker.
 git clone git@github.com:open-recommendation-butler/ORB.git
 cd ORB
 docker compose up -d
-
+```
 
 ## Supported by
 
