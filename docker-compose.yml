@@ -63,8 +63,7 @@ services:
     environment:
       - node.name=es01
       - cluster.name=docker-cluster
-      - cluster.initial_master_nodes=es01,es02,es03
-      - discovery.seed_hosts=es02,es03
+      - cluster.initial_master_nodes=es01
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - bootstrap.memory_lock=true
       - xpack.security.enabled=true
@@ -123,6 +122,7 @@ services:
     build: .
     command: python myproject/manage.py runserver 0.0.0.0:8000
     volumes:
+      - certs:/usr/share/elasticsearch/config/certs
       - .:/code
     ports:
       - "8000:8000"
