@@ -63,5 +63,5 @@ def generate_for_all_articles():
     article.embedding = np.array(article.embedding)
     articles.append(article)
   
-  topics = generate(articles)
+  topics = sort_in_topics(articles)
   return topics
