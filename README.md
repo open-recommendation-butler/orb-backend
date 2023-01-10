@@ -13,7 +13,12 @@ You can start ORB on your machine with docker by following these steps.
 1. Clone the repository
 
 ```bash
-git clone git@github.com:open-recommendation-butler/ORB.git
+git clone https://github.com/open-recommendation-butler/ORB.git
+```
+
+3. Change directory to project directory
+
+```bash
 cd ORB
 ```
 
