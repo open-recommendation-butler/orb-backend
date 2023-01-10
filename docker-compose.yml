@@ -122,7 +122,7 @@ services:
     build: .
     command: >
       bash -c '
-        python manage.py shell < article/helpers/create_index.py;
+        python myproject/manage.py shell < myproject/article/helpers/create_index.py;
         python myproject/manage.py runserver 0.0.0.0:8000;
       '
       
