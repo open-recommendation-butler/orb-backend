@@ -19,9 +19,9 @@ cd ORB
 
 2. Create a file with the name ".env".
 
-3. Create strong passwords for ElasticSearch, Kibana and Django and save them in the ".env" file. 
+3. Insert the following content into the ".env" file. Replace YourStrongPasswordForElasticSearch, YourStrongPasswordForKibana and YourStrongSecretKeyForDjango with your own passwords.
 
-Example:
+Content of ".env" file:
 ```bash
 # Password for the 'elastic' user (at least 6 characters)
 ELASTIC_PASSWORD=YourStrongPasswordForElasticSearch
