@@ -13,3 +13,14 @@ You can add articles by doing a POST request:
 ```bash
 POST http://localhost:8000/articles/
 ```
+
+You can send the following data to the endpoint (as a JSON):
+```json
+{
+  "title": "That's a title",
+  "teaser": "That's a teaser",
+  "fullext": "That's a fulltext",
+  "url": "https://example.com/",
+  "content_type": "article",
+}
+```
