@@ -38,4 +38,4 @@ You can add a document with [Postman](https://www.postman.com/). Postman is a pr
 
 Create a POST request, include the body as a JSON and send the document to the API as seen in the picture.
 
-![alt text](../main/images/add-document-w-postman.png "Add document with Postman")
+![alt text](../images/add-document-w-postman.png "Add document with Postman")
