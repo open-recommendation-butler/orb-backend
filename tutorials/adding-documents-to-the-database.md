@@ -21,7 +21,8 @@ You can send the following data to the endpoint (as a JSON):
   "teaser": "That's a teaser",
   "fullext": "That's a fulltext",
   "url": "https://example.com/",
-  "content_type": "article"
+  "content_type": "article",
+  "created": "2012-04-23T18:25:43.511Z"
 }
 ```
 None of the fields is mandatory.
@@ -59,7 +60,8 @@ document = {
   "teaser": "That's a teaser",
   "fullext": "That's a fulltext",
   "url": "https://example.com/",
-  "content_type": "article"
+  "content_type": "article",
+  "created": "2012-04-23T18:25:43.511Z"
 }
 
 r = requests.post('http://localhost:8000/article/', json=document)
