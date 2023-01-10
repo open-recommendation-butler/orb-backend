@@ -1,7 +1,4 @@
-from ..documents import Article
+from article.documents import Article
 
-def create_index():
-  Article.init()
-
-if __name__ == '__main__':
-  create_index()
+Article.init()
+print('Index created.')
