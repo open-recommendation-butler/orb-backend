@@ -22,9 +22,9 @@ git clone https://github.com/open-recommendation-butler/ORB.git
 cd ORB
 ```
 
-2. Create a file with the name ".env".
+4. Create a file with the name ".env".
 
-3. Insert the following content into the ".env" file. Replace YourStrongPasswordForElasticSearch, YourStrongPasswordForKibana and YourStrongSecretKeyForDjango with your own passwords.
+5. Insert the following content into the ".env" file. Replace YourStrongPasswordForElasticSearch, YourStrongPasswordForKibana and YourStrongSecretKeyForDjango with your own passwords.
 
 Content of ".env" file:
 ```bash
@@ -38,13 +38,17 @@ KIBANA_PASSWORD=YourStrongPasswordForKibana
 SECRET_KEY=YourStrongSecretKeyForDjango
 ```
 
-4. Compose the docker
+6. Compose the docker
 ```bash
 docker compose build
+```
+
+7. Compose the docker
+```bash
 docker compose up -d
 ```
 
-5. Test if ORB is running by visiting [http://localhost:8000](http://localhost:8000).
+8. Test if ORB is running by visiting [http://localhost:8000](http://localhost:8000).
 
 ## Supported by
 
