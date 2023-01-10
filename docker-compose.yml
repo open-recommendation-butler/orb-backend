@@ -120,7 +120,12 @@ services:
       retries: 120
   web:
     build: .
-    command: python myproject/manage.py runserver 0.0.0.0:8000
+    command: >
+      bash -c '
+        python manage.py shell < article/helpers/create_index.py;
+        python myproject/manage.py runserver 0.0.0.0:8000;
+      '
+      
     volumes:
       - certs:/usr/share/elasticsearch/config/certs
       - .:/code
