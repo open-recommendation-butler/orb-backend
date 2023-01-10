@@ -51,8 +51,7 @@ docker compose up -d
 8. Test if ORB is running by visiting [http://localhost:8000](http://localhost:8000).
 
 ## Tutorials
-
-[`How to add documents to the database?`](https://github.com/open-recommendation-butler/ORB/blob/303d3c8db03a368c760db1dbf1180e4c53de97d0/tutorials/1%20How%20to%20add%20documents%20to%20the%20database%3F.md=
+[How to add documents to the database?](../main/tutorials/adding-documents-to-the-database.md)
 
 ## Supported by
 
