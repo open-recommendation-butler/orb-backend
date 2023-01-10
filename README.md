@@ -51,7 +51,9 @@ docker compose up -d
 8. Test if ORB is running by visiting [http://localhost:8000](http://localhost:8000).
 
 ## Tutorials
-[How to add documents to the database?](../main/tutorials/adding-documents-to-the-database.md)
+
+[1. How to add documents to the database?](../main/tutorials/adding-documents-to-the-database.md)
+[2. How to search for documents with the API?](../main/tutorials/searching-for-documents.md)
 
 ## Supported by
 
