@@ -4,6 +4,8 @@ After setting up the ORB docker, your database does not include any documents. D
 
 In this tutorial you will learn how to add documents to the database.
 
+## The endpoint
+
 ORB provides an endpoint to add documents.
 
 You can add articles by doing a POST request:
