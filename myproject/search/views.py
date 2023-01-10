@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from elasticsearch_dsl import Q
 from article.documents import Article
 import math
@@ -14,6 +15,8 @@ def search(request):
   as_topics = request.GET.get('as_topics', False)
 
   content_type = request.GET.get('content_type', 'article')
+
+  return_json = request.GET.get('return_json', False)
 
   # Default to "article" as content type if no valid content type is provided
   if content_type not in ['podcast', 'gallery', 'multimedia']:
@@ -112,5 +115,8 @@ def search(request):
     "page": page,
     "pageCount": pageCount
   }
+
+  if return_json:
+    return JsonResponse(context)
 
   return render(request, 'search/results.html', context)
