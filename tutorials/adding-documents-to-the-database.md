@@ -32,10 +32,37 @@ If successful, the API sends the status *201 Created*.
 
 In this section you will find examples how to add send requests to the API.
 
-### Adding a document with Postman
+### a) Adding a document with Postman
 
 You can add a document with [Postman](https://www.postman.com/). Postman is a program to test APIs.
 
 Create a POST request, include the body as a JSON and send the document to the API as seen in the picture.
 
 ![alt text](../images/add-document-w-postman.png "Add document with Postman")
+
+### b) Adding a document with Python
+
+You can automate adding documents with the [Python Request Library](https://requests.readthedocs.io/en/latest/).
+
+Install the library.
+
+```bash
+pip install requests
+```
+
+Run the following code to add a document:
+```python
+import requests
+
+document = {
+  "title": "That's a title",
+  "teaser": "That's a teaser",
+  "fullext": "That's a fulltext",
+  "url": "https://example.com/",
+  "content_type": "article"
+}
+
+r = requests.post('http://localhost:8000/article/', json=document)
+
+print(r.status_code)
+```
