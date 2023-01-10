@@ -30,10 +30,12 @@ If successful, the API sends the status *201 Created*.
 
 ## Examples
 
-# Adding a document with Postman
+In this section you will find examples how to add send requests to the API.
+
+### Adding a document with Postman
 
 You can add a document with [Postman](https://www.postman.com/). Postman is a program to test APIs.
 
 Create a POST request, include the body as a JSON and send the document to the API as seen in the picture.
 
-![alt text](../main/tutorials/images/add-document-w-postman.png "Add document with Postman")
+![alt text](../main/images/add-document-w-postman.png "Add document with Postman")
