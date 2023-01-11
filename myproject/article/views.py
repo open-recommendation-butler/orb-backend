@@ -32,9 +32,15 @@ class ArticleView(APIView):
       url=request.data.get("url"),
       created=request.data.get("created")
     )
-    
+
     # Add the embedding
-    a.embedding = settings.MODEL.encode("\n\n".join([x for x in (a.title, a.teaser, a.fulltext) if x]))
+    a.embedding = list(
+      settings.MODEL.encode(
+        "\n\n".join(
+            [x for x in (a.title, a.teaser, a.fulltext) if x]
+          )
+      )
+    )
 
     # Save the article
     a.save()
