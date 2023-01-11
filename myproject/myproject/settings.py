@@ -149,3 +149,7 @@ connections.create_connection(
     ca_certs='/usr/share/elasticsearch/config/certs/ca/ca.crt', 
     http_auth=("elastic", env("ELASTIC_PASSWORD"))
 )
+
+from sentence_transformers import SentenceTransformer
+
+MODEL = SentenceTransformer('T-Systems-onsite/cross-en-de-roberta-sentence-transformer')
