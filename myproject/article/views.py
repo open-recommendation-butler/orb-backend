@@ -5,7 +5,7 @@ from .documents import Article
 from .serializers import ArticleSerializer
 from elasticsearch import NotFoundError
 from django.http import Http404
-
+from django.conf import settings
 class ArticleView(APIView):
   """
   Retrieve, update or delete an article instance.
@@ -23,6 +23,7 @@ class ArticleView(APIView):
     return Response(serializer.data)
 
   def post(self, request, format=None):
+
     # Create a new article document and save it to the ElasticSearch database
     a = Article(
       title=request.data.get("title"),
@@ -31,16 +32,15 @@ class ArticleView(APIView):
       url=request.data.get("url"),
       created=request.data.get("created")
     )
+    
+    # Add the embedding
+    a.embedding = settings.MODEL.encode("\n\n".join([x for x in (a.title, a.teaser, a.fulltext) if x]))
+
+    # Save the article
     a.save()
+
     return Response(status=status.HTTP_201_CREATED)
 
-  # def put(self, request, pk, format=None):
-  #     snippet = self.get_object(pk)
-  #     serializer = SnippetSerializer(snippet, data=request.data)
-  #     if serializer.is_valid():
-  #         serializer.save()
-  #         return Response(serializer.data)
-  #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
   def delete(self, request, pk, format=None):
       a = self.get_object(pk)
