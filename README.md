@@ -56,7 +56,7 @@ docker compose up -d
 
 [2. How to search for documents with the API?](../main/tutorials/searching-for-documents.md)
 
-[3. How to add the News Category Dataset to the database?](../main/tutorials/adding-news-category-dataset/addingg-news-category-dataset.md
+[3. How to add the News Category Dataset to the database?](../main/tutorials/adding-news-category-dataset/addingg-news-category-dataset.md)
 
 ## Supported by
 
