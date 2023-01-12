@@ -20,10 +20,10 @@ We will add those attributes to the database.
 
 ## Requirements
 
-a) ORB is up and running. See: [How to get started](https://github.com/open-recommendation-butler/ORB#how-to-get-started)
-b) A kaggle account. It's free: [Register at Kaggle](https://www.kaggle.com/)
-c) An API key from Kaggle. More information: [Kaggle's documentation for authentication](https://www.kaggle.com/docs/api#authentication)
-d) The opendatasets and requests libraries. You can install them with the following command:
+* ORB is up and running. See: [How to get started](https://github.com/open-recommendation-butler/ORB#how-to-get-started)
+* A kaggle account. It's free: [Register at Kaggle](https://www.kaggle.com/)
+* An API key from Kaggle. More information: [Kaggle's documentation for authentication](https://www.kaggle.com/docs/api#authentication)
+* The opendatasets and requests libraries. You can install them with the following command:
 
 ```bash
 pip install requests, opendatasets
@@ -31,7 +31,7 @@ pip install requests, opendatasets
 
 ## Run the code
 
-To download the dataset from Kaggle and to insert it into the dataset, you can use this script: [addings-news-category-dataset.py](tutorials/addings-news-category-dataset/addings-news-category-dataset.py)
+To download the dataset from Kaggle and to insert it into the dataset, you can use this script: [adding-news-category-dataset.py](/tutorials/adding-news-category-dataset/adding-news-category-dataset.py)
 
 You can run the script from with main directory with the following command:
 
