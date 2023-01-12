@@ -24,26 +24,35 @@ class ArticleView(APIView):
 
   def post(self, request, format=None):
 
-    # Create a new article document and save it to the ElasticSearch database
-    a = Article(
-      title=request.data.get("title"),
-      teaser=request.data.get("teaser"),
-      fulltext=request.data.get("fulltext"),
-      url=request.data.get("url"),
-      created=request.data.get("created")
-    )
+    if not isinstance(request.data, list):
+      request.data = list(request.data)
+    
 
-    # Add the embedding
-    a.embedding = list(
-      settings.MODEL.encode(
-        "\n\n".join(
-            [x for x in (a.title, a.teaser, a.fulltext) if x]
-          )
+    for i, entry in enumerate(request.data):
+      # Create a new article document and save it to the ElasticSearch database
+      a = Article(
+        title=entry.get("title"),
+        teaser=entry.get("teaser"),
+        fulltext=entry.get("fulltext"),
+        url=entry.get("url"),
+        created=entry.get("created"),
+        content_type=entry.get("content_type"),
+        portal=entry.get("portal"),
+        rubrik=entry.get("rubrik")
       )
-    )
 
-    # Save the article
-    a.save()
+      # Add the embedding
+      a.embedding = list(
+        settings.MODEL.encode(
+          "\n\n".join(
+              [x for x in (a.title, a.teaser, a.fulltext) if x]
+            )
+        )
+      )
+
+      # Save the article
+      a.save()
+      print(f'{i}/{len(request.data)}')
 
     return Response(status=status.HTTP_201_CREATED)
 
