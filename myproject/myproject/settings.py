@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import environ
 from pathlib import Path
 import os
+from sentence_transformers import SentenceTransformer
+from elasticsearch_dsl import connections
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -134,14 +136,14 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+
+# Connect to ElasticSearch database
 ELASTICSEARCH_DSL={
     'default': {
         'hosts': 'localhost:9200',
         'timeout': 120
     },
 }
-
-from elasticsearch_dsl import connections
 
 connections.create_connection(
     hosts=['https://es01:9200/'], 
@@ -150,6 +152,10 @@ connections.create_connection(
     http_auth=("elastic", env("ELASTIC_PASSWORD"))
 )
 
-from sentence_transformers import SentenceTransformer
 
+
+# Load transformer language model
+
+print("Loading language model.")
 MODEL = SentenceTransformer('T-Systems-onsite/cross-en-de-roberta-sentence-transformer')
+print("Language model loaded.")
