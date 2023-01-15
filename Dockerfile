@@ -4,12 +4,13 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 WORKDIR /code
 
-# install dependencies
+# Install dependencies
 RUN pip install --upgrade pip
 COPY requirements.txt /code/
 RUN pip install -r requirements.txt
 
-# copy project
+# Copy project
 COPY . /code/
 
-RUN python myproject/manage.py migrate;
+# Do migrations
+RUN python app/manage.py migrate;
