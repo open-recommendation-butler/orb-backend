@@ -93,17 +93,19 @@ services:
       timeout: 10s
       retries: 120
   web:
-    build: .
-    context: ./app
+    build: 
+      context: ./app
+      dockerfile: Dockerfile
     command: >
       bash -c '
-        python app/manage.py shell < app/article/helpers/create_index.py;
-        gunicorn app.wsgi:application --bind 0.0.0.0:8000
+        cd app;
+        python manage.py shell < article/helpers/create_index.py;
+        gunicorn app.wsgi:application --bind 0.0.0.0:8000;
       '
     expose:
       - 8000
     env_file:
-      - .env
+      - ./.env
     volumes:
       - certs:/usr/share/elasticsearch/config/certs
       - .:/code
