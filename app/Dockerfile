@@ -13,4 +13,4 @@ RUN pip install -r requirements.txt
 COPY . /code/
 
 # Do migrations
-RUN python app/manage.py migrate;
+#RUN python manage.py migrate;
