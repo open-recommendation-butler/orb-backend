@@ -46,6 +46,7 @@ nltk==3.7
 numba==0.56.4
 numpy==1.23.5
 oauthlib==3.2.2
+opendatasets=0.1.22
 outcome==1.2.0
 packaging==22.0
 pathy==0.10.1
