@@ -98,7 +98,6 @@ services:
       dockerfile: Dockerfile
     command: >
       bash -c '
-        cd app;
         python manage.py shell < article/helpers/create_index.py;
         gunicorn app.wsgi:application --bind 0.0.0.0:8000;
       '
@@ -108,7 +107,7 @@ services:
       - ./.env
     volumes:
       - certs:/usr/share/elasticsearch/config/certs
-      - .:/code
+      - static_volume:/home/app/web/staticfiles
     depends_on:
       es01:
         condition: service_healthy
@@ -118,9 +117,13 @@ services:
       - 1337:80
     depends_on:
       - web
+    volumes:
+      - static_volume:/home/app/web/staticfiles
 
 volumes:
   certs:
     driver: local
   esdata01:
+    driver: local
+  static_volume:
     driver: local
