@@ -26,17 +26,17 @@ We will add those attributes to the database.
 * The opendatasets and requests libraries. You can install them with the following command:
 
 ```bash
-pip install requests, opendatasets
+pip install requests opendatasets
 ```
 
 ## Run the code
 
 To download the dataset from Kaggle and to insert it into the dataset, you can use this script: [adding-news-category-dataset.py](/tutorials/adding-news-category-dataset/adding-news-category-dataset.py)
 
-You can run the script from with main directory with the following command:
+You can run the script from the main directory with the following command:
 
 ```bash
-python tutorials/adding-example-dataset/adding-news-category-dataset.py
+python tutorials/adding-news-category-dataset/adding-news-category-dataset.py
 ```
 
 ORB will convert the articles to embeddings and index them. Depending on your machine, this might take up some hours.
