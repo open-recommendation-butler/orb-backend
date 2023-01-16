@@ -101,6 +101,7 @@ services:
     command: >
       bash -c '
         python manage.py shell < article/helpers/create_index.py;
+        python manage.py collectstatic;
         gunicorn app.wsgi:application --bind 0.0.0.0:8000;
       '
     expose:
