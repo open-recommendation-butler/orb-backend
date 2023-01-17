@@ -39,7 +39,7 @@ You can add a document with [Postman](https://www.postman.com/). Postman is a pr
 
 Create a POST request, include the body as a JSON and send the document to the API as seen in the picture.
 
-![alt text](../images/add-document-w-postman.png "Add document with Postman")
+![alt text](../tutorials/1-adding-documents-to-the-database/add-document-w-postman.png "Add document with Postman")
 
 ### b) Adding a document with Python
 
