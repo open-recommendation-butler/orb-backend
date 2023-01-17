@@ -16,15 +16,15 @@ You can start ORB on your machine with docker by following these steps.
 git clone https://github.com/open-recommendation-butler/ORB.git
 ```
 
-3. Change directory to project directory
+2. Change directory to project directory
 
 ```bash
 cd ORB
 ```
 
-4. Create a file with the name ".env".
+3. Create a file with the name ".env".
 
-5. Insert the following content into the ".env" file. Replace YourStrongPasswordForElasticSearch, YourStrongPasswordForKibana and YourStrongSecretKeyForDjango with your own passwords.
+4. Insert the following content into the ".env" file. Replace YourStrongPasswordForElasticSearch, YourStrongPasswordForKibana and YourStrongSecretKeyForDjango with your own passwords.
 
 Content of ".env" file:
 ```bash
@@ -38,25 +38,27 @@ KIBANA_PASSWORD=YourStrongPasswordForKibana
 SECRET_KEY=YourStrongSecretKeyForDjango
 ```
 
-6. Compose the docker
+5. Compose the docker
 ```bash
 docker compose build
 ```
 
-7. Compose the docker
+6. Compose the docker
 ```bash
 docker compose up -d
 ```
 
-8. Test if ORB is running by visiting [http://localhost:8000](http://localhost:8000).
+7. Test if ORB is running by visiting [http://localhost:8000](http://localhost:8000).
 
 ## Tutorials
 
-[1. How to add documents to the database?](../main/tutorials/adding-documents-to-the-database.md)
+[1. How to add documents to the database?](../main/tutorials/1-adding-documents-to-the-database/adding-documents-to-the-database.md)
 
-[2. How to search for documents with the API?](../main/tutorials/searching-for-documents.md)
+[2. How to search for documents with the API?](../main/tutorials/2-searching-for-documents/searching-for-documents.md)
 
 [3. How to add the News Category Dataset to the database?](../main/tutorials/adding-news-category-dataset/addingg-news-category-dataset.md)
+
+[4. How to deploy on a production server?](../main/tutorials/4-deploy-orb/deploy-orb.md)
 
 ## Supported by
 
