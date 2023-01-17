@@ -55,12 +55,18 @@ docker compose -f docker-compose.prod.yml up -d
 7. Test if ORB is running by visiting your domain or IP adress.
 
 
-## (Optionally:) Securing ORB with SSL
+## *Optionally:* Securing ORB with SSL
 
-You can secure the access to ORB with SSL. To do so, we will create a certificate with (Let's encrypt)[https://letsencrypt.org/] and (Certbot)[https://certbot.eff.org/].
+You can secure the access to ORB with SSL. To do so, we will create a certificate with [Let's encrypt](https://letsencrypt.org/) and [certbot](https://certbot.eff.org/).
 
 To do so, run the following command on the server. Remember to replace *YourMailAdress* and *YourDomain*. It's recommended to use a working mail adress. You will receive a notification if your certificate expires. 
 
 ```bash
 docker exec orb-nginx-1 certbot --nginx -n --agree-tos -m YourMailAdress -d YourDomain
+```
+
+Hint: This certificate will expire after 3 months. To set an auto renewal, set a cronjob inside the orb-nginx-1 container:
+
+```
+0 0 1 * * certbot renew --quiet
 ```
