@@ -24,7 +24,7 @@ cd ORB
 
 3. Create a file with the name ".env".
 
-4. Insert the following content into the ".env" file. Replace YourStrongPasswordForElasticSearch, YourStrongPasswordForKibana and YourStrongSecretKeyForDjango with your own passwords.
+4. Insert the following content into the ".env" file. Replace *YourStrongPasswordForElasticSearch*, *YourStrongPasswordForKibana* and *YourStrongSecretKeyForDjango* with your own passwords.
 
 Content of ".env" file:
 ```bash
