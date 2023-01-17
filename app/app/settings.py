@@ -31,7 +31,7 @@ environ.Env.read_env(os.path.join(Path(BASE_DIR).parent, '.env'))
 SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env("DEBUG", default=False)
+DEBUG = env("DEBUG", default=True)
 
 ALLOWED_HOSTS = [env("DOMAIN", default=""), '.localhost', '127.0.0.1', '[::1]']
 
@@ -48,9 +48,11 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     "article",
     "rest_framework",
+    "rest_framework.authtoken",
     "index",
     "search",
-    "topic"
+    "topic",
+    "user"
 ]
 
 MIDDLEWARE = [
@@ -137,6 +139,16 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication'
+    ]
+}
+
+if env("REQUIRE_AUTHENTICATION", default=False):
+    REST_FRAMEWORK['DEFAULT_PERMISSION_CLASSES'] = [
+        'rest_framework.permissions.IsAuthenticated'
+    ]
 
 # Connect to ElasticSearch database
 ELASTICSEARCH_DSL={

@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from index.views import index, imprint
+from rest_framework.authtoken import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -23,5 +24,6 @@ urlpatterns = [
     path("", index, name="index"),
     path("imprint/", imprint, name="imprint"),
     path('search/', include('search.urls')),
-    path('api-auth/', include('rest_framework.urls'))
+    path('api-auth/', include('rest_framework.urls')),
+    path('api-token-auth/', views.obtain_auth_token)
 ]

@@ -22,37 +22,38 @@ class ArticleView(APIView):
     serializer = ArticleSerializer(a)
     return Response(serializer.data)
 
+  def save(self, entry):
+    # Create a new article document and save it to the ElasticSearch database
+    a = Article(
+      title=entry.get("title"),
+      teaser=entry.get("teaser"),
+      fulltext=entry.get("fulltext"),
+      url=entry.get("url"),
+      created=entry.get("created"),
+      content_type=entry.get("content_type"),
+      portal=entry.get("portal"),
+      rubrik=entry.get("rubrik")
+    )
+
+    # Add the embedding
+    a.embedding = list(
+      settings.MODEL.encode(
+        "\n\n".join(
+            [x for x in (a.title, a.teaser, a.fulltext) if x]
+          )
+      )
+    )
+
+    # Save the article
+    a.save()
+
   def post(self, request, format=None):
 
-    if not isinstance(request.data, list):
-      request.data = list(request.data)
-    
-
-    for i, entry in enumerate(request.data):
-      # Create a new article document and save it to the ElasticSearch database
-      a = Article(
-        title=entry.get("title"),
-        teaser=entry.get("teaser"),
-        fulltext=entry.get("fulltext"),
-        url=entry.get("url"),
-        created=entry.get("created"),
-        content_type=entry.get("content_type"),
-        portal=entry.get("portal"),
-        rubrik=entry.get("rubrik")
-      )
-
-      # Add the embedding
-      a.embedding = list(
-        settings.MODEL.encode(
-          "\n\n".join(
-              [x for x in (a.title, a.teaser, a.fulltext) if x]
-            )
-        )
-      )
-
-      # Save the article
-      a.save()
-      print(f'{i}/{len(request.data)}')
+    if isinstance(request.data, list):
+      for i, entry in enumerate(request.data):
+        self.save(entry)
+    else:
+      self.save(request.data)
 
     return Response(status=status.HTTP_201_CREATED)
 
