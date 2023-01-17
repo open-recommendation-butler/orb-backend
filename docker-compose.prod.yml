@@ -96,8 +96,8 @@ services:
     restart: always
   web:
     build: 
-      context: ./app
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./app/Dockerfile
     command: >
       bash -c '
         python manage.py shell < article/helpers/create_index.py;
