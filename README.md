@@ -8,7 +8,7 @@ This is a django wrapper around an ElasticSearch engine. It's optimized for publ
 
 ## How to get started
 
-You can start ORB on your machine with docker by following these steps.
+You can start ORB on your machine with docker by following these steps:
 
 1. Clone the repository
 
