@@ -35,6 +35,7 @@ DEBUG = env("DEBUG", default=True)
 
 ALLOWED_HOSTS = [env("DOMAIN", default=""), '.localhost', '127.0.0.1', '[::1]']
 
+CSRF_TRUSTED_ORIGINS = [f'http://{env("DOMAIN", default="")}', f'https://{env("DOMAIN", default="")}']
 
 # Application definition
 
