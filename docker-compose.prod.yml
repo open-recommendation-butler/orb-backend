@@ -102,6 +102,7 @@ services:
       bash -c '
         python manage.py shell < article/helpers/create_index.py;
         python manage.py collectstatic --noinput;
+        python manage.py migrate;
         gunicorn app.wsgi:application --bind 0.0.0.0:8000;
       '
     expose:
