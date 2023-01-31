@@ -23,6 +23,12 @@ class ArticleView(APIView):
     return Response(serializer.data)
 
   def save(self, entry):
+    # Ignore articles that are already in the database
+    query = Article.search().filter("term", url=entry.get("url"))
+    response = query.execute()
+    if response.hits.total.value != 0:
+      return
+    
     # Create a new article document and save it to the ElasticSearch database
     a = Article(
       title=entry.get("title"),

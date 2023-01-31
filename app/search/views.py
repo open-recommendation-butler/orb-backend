@@ -99,6 +99,7 @@ def search(request):
   ### Sort in topics ###
   if as_topics:
     query = sort_in_topics(query)
+    
     # Sort topics by sum of their scores
     query.sort(key=lambda topic: sum([article.meta.score for article in topic.articles]), reverse=True)
 
