@@ -5,7 +5,7 @@ class Topic(Document):
   title = Text()
   teaser = Text()
   created = Date()
-  articles = Object(Article)
+  articles = Object(Article, multi=True)
 
   class Index:
     name = 'topic'
