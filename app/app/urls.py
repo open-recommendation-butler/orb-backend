@@ -21,6 +21,7 @@ from rest_framework.authtoken import views
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("article/", include('article.urls')),
+    path("topic/", include('topic.urls')),
     path("", index, name="index"),
     path("imprint/", imprint, name="imprint"),
     path('search/', include('search.urls')),
