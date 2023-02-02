@@ -38,7 +38,7 @@ class ArticleView(APIView):
       created=entry.get("created"),
       content_type=entry.get("content_type"),
       portal=entry.get("portal"),
-      rubrik=entry.get("rubrik")
+      category=entry.get("category")
     )
 
     # Add the embedding
