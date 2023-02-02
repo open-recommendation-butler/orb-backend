@@ -1,11 +1,12 @@
-from elasticsearch_dsl import Document, Date, Text, Object
-from article.documents import Article
+from elasticsearch_dsl import Document, Date, Text, Object, Integer
+from article.documents import ArticleInner
 
 class Topic(Document):
   title = Text()
   teaser = Text()
   created = Date()
-  articles = Object(Article, multi=True)
+  article_count = Integer()
+  articles = Object(ArticleInner, multi=True)
 
   class Index:
     name = 'topic'
