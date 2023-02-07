@@ -11,9 +11,10 @@ from django.utils import timezone
 from .management.commands.clear_topics import Command as Clear_Topics
 from .serializers import TopicSerializer
 from django.conf import settings
-import openai
+#import openai
+from collections import Counter
 
-openai.api_key = settings.OPENAI_API_KEY
+#openai.api_key = settings.OPENAI_API_KEY
 
 class TopicView(APIView):
   def get_object(self, pk):
@@ -43,37 +44,50 @@ class TopicView(APIView):
     for topic in topics:
       topic_title = None
 
-      if len(topic.articles) > 1:
-        print()
-        for article in topic.articles:
-          print(article, article.portal, '|', article.title)
+      categories = [article.category for article in topic.articles]
+      keywords = []
+      for article in topic.articles:
+        try:
+          keywords.extend(article.keywords)
+        # If article has no keywords
+        except TypeError:
+          pass
+      # if len(topic.articles) > 1:
+      #   print()
+      #   for article in topic.articles:
 
-        if settings.OPENAI_API_KEY:
-          topic_title = openai.Completion.create(
-            model="text-davinci-003", 
-            prompt=f'Paraphrasiere in wenigen Wörtern: "{topic.articles[0].title}"', 
-            temperature=0.7, 
-            max_tokens=30
-          )
-          topic_title = topic_title.choices[0].text
-          topic_title = topic_title.strip()
-          if topic_title.endswith('.'):
-            topic_title = topic_title[:-1]
-          print('TITLE:', topic_title)
 
+        # if settings.OPENAI_API_KEY:
+          # topic_title = openai.Completion.create(
+          #   model="text-davinci-003", 
+          #   prompt=f'Paraphrasiere in wenigen Wörtern: "{topic.articles[0].title}"', 
+          #   temperature=0.7, 
+          #   max_tokens=30
+          # )
+          # topic_title = topic_title.choices[0].text
+          # topic_title = topic_title.strip()
+          # if topic_title.endswith('.'):
+          #   topic_title = topic_title[:-1]
+          # print('TITLE:', topic_title)
+
+      categories_counted = Counter(categories)
+      keywords_counted = Counter(keywords)
       t = Topic(
         title=topic_title,
         created=timezone.now(),
         article_count=len(topic.articles),
+        category=categories_counted.most_common(1)[0][0],
+        keywords=[x[0] for x in keywords_counted.most_common(3)],
         articles=[
           Article(
             title=a.title,
             teaser=a.teaser,
             url=a.url,
             created=a.created,
-            rubrik=a.rubrik,
+            category=a.category,
             content_type=a.content_type,
-            portal=a.portal
+            portal=a.portal,
+            keywords=a.keywords
           ) for a in topic.articles  
         ]
       )
