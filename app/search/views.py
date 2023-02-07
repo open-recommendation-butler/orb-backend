@@ -4,6 +4,7 @@ from elasticsearch_dsl import Q
 from article.documents import Article
 import math
 from topic.generate import sort_in_topics
+from article.serializers import ArticleSerializer
 
 def search(request):
   
@@ -48,10 +49,14 @@ def search(request):
   query = query.query(
     'bool', 
     must=[
-      Q('multi_match', query=queryString, fields=['title', 'teaser', 'fulltext'], fuzziness="AUTO"),
-      # Q('term', content_type=content_type)
+      Q('multi_match', query=queryString, fields=['title^3', 'teaser^2', 'fulltext'], fuzziness="AUTO"),
+      Q('term', content_type=content_type)
     ],
-    should=[Q('match', is_paid=True), Q('match', is_news_agency=False)]
+    should=[
+      Q('match', is_paid=True), 
+      Q('match', is_news_agency=False),
+      Q('term', portal=False),
+    ]
   )
   # Query a lot of articles if they are supposed to be sorted in topics
   if as_topics:
@@ -95,7 +100,6 @@ def search(request):
     if pageCount > 0 and page > pageCount:
       return redirect(f'/search/?q={queryString}&content_type={content_type}&page={pageCount}')
   
-
   ### Sort in topics ###
   if as_topics:
     query = sort_in_topics(query)
@@ -103,10 +107,13 @@ def search(request):
     # Sort topics by sum of their scores
     query.sort(key=lambda topic: sum([article.meta.score for article in topic.articles]), reverse=True)
 
-  ### Create context dictionary ###
+    content = query
+  else:
+    content = ArticleSerializer(query, many=True).data
 
+  ### Create context dictionary ###
   context = {
-    "content": query,
+    "content": content,
     "queryString": queryString, 
     "took": (response.took + suggestResponse.took) / 1000, 
     "hitCount": response.hits.total.value,
