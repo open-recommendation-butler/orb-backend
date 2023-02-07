@@ -7,5 +7,6 @@ class ArticleSerializer(serializers.Serializer):
   portal = serializers.CharField(required=False, allow_blank=True)
   category = serializers.CharField(required=False, allow_blank=True)
   content_type = serializers.CharField(required=False, allow_blank=True)
+  keywords = serializers.CharField(required=False, allow_blank=True)
   url = serializers.URLField()
   created = serializers.DateTimeField()
