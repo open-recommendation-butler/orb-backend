@@ -2,6 +2,7 @@ from article.documents import Article
 import numpy as np
 from numpy.linalg import norm
 from .models import Topic
+from sklearn.cluster import DBSCAN
 
 def cosine_sim(a, b):
   return np.dot(a, b)/(norm(a) * norm(b))
@@ -52,16 +53,49 @@ def sort_in_topics(articles):
 
   return topics
 
-def generate_for_all_articles():
+def generate_for_all_articlesSelf():
   query = Article.search()
   query = query.query('match_all')
   response = query.execute()
 
   articles = []
 
-  for i, article in enumerate(query.scan()):
-    article.embedding = np.array(article.embedding)
-    articles.append(article)
+  # for i, article in enumerate(query.scan()):
+  #   article.embedding = np.array(article.embedding)
+  #   articles.append(article)
   
-  topics = sort_in_topics(articles)
-  return topics
+  # topics = sort_in_topics(articles)
+  # return topics
+
+def generate_for_all_articles():
+  query = Article.search()
+  query = query.query('match_all')
+  response = query.execute()
+  
+  articles = [a for a in query.scan()]
+  X = [a.embedding for a in articles]
+  X = np.array(X)
+
+  EPS = 6
+  MIN_SAMPLES = 2
+
+  db = DBSCAN(eps=EPS, min_samples=MIN_SAMPLES).fit(X)
+  labels = db.labels_
+
+  topics = {}
+  for i, label in enumerate(labels):
+    try:
+      topics[label].append(articles[i])
+    except KeyError:
+      topics[label] = [articles[i]]
+
+  topic_list = []
+  for key, value in topics.items():
+    if key != -1:
+      print()
+      t = Topic()
+      for article in value:
+        print(article.title)
+        t.articles.append(article)
+      topic_list.append(t)
+  return topic_list
