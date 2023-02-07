@@ -27,6 +27,7 @@ class Article(Document):
   portal = Keyword()
   word_count = Integer()
   is_news_agency = Boolean()
+  keywords = Keyword()
   embedding = DenseVector(
     dims=768
   )
@@ -56,6 +57,7 @@ class ArticleInner(InnerDoc):
   portal = Keyword()
   word_count = Integer()
   is_news_agency = Boolean()
+  keywords = Keyword()
   embedding = DenseVector(
     dims=768
   )
