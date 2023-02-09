@@ -4,7 +4,7 @@ from .views import ArticleView
 
 urlpatterns = [
     path('', ArticleView.as_view()),
-    path('<str:pk>/', ArticleView.as_view()),
+    path('<str:org_id>/', ArticleView.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

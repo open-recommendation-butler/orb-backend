@@ -6,31 +6,32 @@ from .serializers import ArticleSerializer
 from elasticsearch import NotFoundError
 from django.http import Http404
 from django.conf import settings
+
 class ArticleView(APIView):
   """
   Retrieve, update or delete an article instance.
   """
-  def get_object(self, pk):
-    try:
-      a = Article.get(pk)
-      return a
-    except NotFoundError:
-      raise Http404
+  def get_object(self, org_id):
+    query = Article.search()
+    query = query.filter('term', org_id=org_id)
+    query.execute()
+    query = list(query)
+    if query:
+      return query[0]
 
-  def get(self, request, pk, format=None):
-    a = self.get_object(pk)
+    return None
+
+  def get(self, request, org_id, format=None):
+    a = self.get_object(org_id)
+    if not a:
+      raise Http404
     serializer = ArticleSerializer(a)
     return Response(serializer.data)
 
-  def save(self, entry):
-    # Ignore articles that are already in the database
-    query = Article.search().filter("term", url=entry.get("url"))
-    response = query.execute()
-    if response.hits.total.value != 0:
-      return
-    
+  def save(self, entry):    
     # Create a new article document and save it to the ElasticSearch database
     a = Article(
+      org_id=entry.get("org_id"),
       title=entry.get("title"),
       teaser=entry.get("teaser"),
       fulltext=entry.get("fulltext"),
@@ -55,6 +56,17 @@ class ArticleView(APIView):
     a.save()
 
   def post(self, request, format=None):
+
+    # Ignore articles whose url is already in the database
+    if request.data.get("url"):
+      query = Article.search().filter("term", url=request.data.get("url"))
+      response = query.execute()
+      if response.hits.total.value != 0:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    # Ignore articles whose id is already in the database
+    if request.data.get("org_id") and self.get_object(request.data.get("org_id")):
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     if isinstance(request.data, list):
       for i, entry in enumerate(request.data):
