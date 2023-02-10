@@ -28,7 +28,7 @@ class ArticleView(APIView):
     serializer = ArticleSerializer(a)
     return Response(serializer.data)
 
-  def save(self, entry):    
+  def save(self, entry):
     # Create a new article document and save it to the ElasticSearch database
     a = Article(
       org_id=entry.get("org_id"),
@@ -39,8 +39,7 @@ class ArticleView(APIView):
       created=entry.get("created"),
       content_type=entry.get("content_type"),
       portal=entry.get("portal"),
-      category=entry.get("category"),
-      keywords=entry.get("keywords")
+      category=entry.get("category")
     )
 
     # Add the embedding

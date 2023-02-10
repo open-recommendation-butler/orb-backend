@@ -1,7 +1,9 @@
-from elasticsearch_dsl import Document, InnerDoc, Date, Text, Keyword, Boolean, Integer, DenseVector, analyzer
+from elasticsearch_dsl import Document, InnerDoc, Date, Text, Keyword, Boolean, Integer, DenseVector, analyzer, Completion, token_filter
+from article.helpers.get_keywords import get_keywords
+from suggestion.documents import Suggestion
 
 raw_strip = analyzer('raw_strip',
-    tokenizer="whitespace"
+  tokenizer="whitespace"
 )
 
 
@@ -31,6 +33,28 @@ class Article(Document):
   embedding = DenseVector(
     dims=768
   )
+
+  def save(self):
+    self.keywords = get_keywords(" ".join([x for x in [self.title, self.teaser, self.fulltext] if x]))
+    super().save()
+
+    # Iterate through all keywords
+    for keyword in self.keywords:
+
+      # Check if keyword is already in the suggestion index
+      query = Suggestion.search()
+      query = query.filter('term', name=keyword)
+      query.execute()
+      query = list(query)
+
+      # If its in the index increment the occurences count
+      # Else: Create new enty
+      if query:
+        query[0].occurences += 1
+        query[0].save()
+      else:
+        s = Suggestion(name=keyword, occurences=1)
+        s.save()
 
   class Index:
     name = 'article'

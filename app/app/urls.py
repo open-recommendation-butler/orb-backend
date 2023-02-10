@@ -22,6 +22,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("article/", include('article.urls')),
     path("topic/", include('topic.urls')),
+    path("suggestion/", include('suggestion.urls')),
     path("", index, name="index"),
     path("imprint/", imprint, name="imprint"),
     path('search/', include('search.urls')),
