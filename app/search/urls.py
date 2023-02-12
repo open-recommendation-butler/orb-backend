@@ -1,7 +1,9 @@
 from django.urls import path
-
-from . import views
+from rest_framework.urlpatterns import format_suffix_patterns
+from .views import SearchView
 
 urlpatterns = [
-    path('', views.search, name='search'),
+    path('', SearchView.as_view())
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
