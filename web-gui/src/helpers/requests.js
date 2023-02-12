@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-let DOMAIN = "http://localhost:8001";
+let DOMAIN = "http://localhost:8000";
 
 let get_headers = async () => {
   // const user = await refreshToken();

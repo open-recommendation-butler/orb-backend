@@ -13,7 +13,9 @@ function Footer() {
           13357 Berlin
         </div>
         <div className="mb-8">
-          hallo@cluster.today
+          <a href="mailto:openrecommendationbutler@gmail.com?subject=Request%20for%20Open%20Recommendation%20Butler">
+            openrecommendationbutler@gmail
+          </a>
         </div>
         <div className="font-bold mb-4">Kindly funded and supported by</div>
         <a href="https://www.media-lab.de/de/media-tech-lab" target="_blank">
