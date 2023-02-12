@@ -35,7 +35,9 @@ DEBUG = env("DEBUG", default=True)
 
 ALLOWED_HOSTS = [env("DOMAIN", default=""), '.localhost', '127.0.0.1', '[::1]']
 
-CSRF_TRUSTED_ORIGINS = [f'http://{env("DOMAIN", default="")}', f'https://{env("DOMAIN", default="")}']
+CSRF_TRUSTED_ORIGINS = [f'http://{env("DOMAIN", default="")}', f'https://{env("DOMAIN", default="")}', 'http://localhost', 'http://127.0.0.1']
+
+CORS_ALLOWED_ORIGINS = ['http://localhost:3000']
 
 # Application definition
 
@@ -48,6 +50,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     'django.contrib.humanize',
     "article",
+    "corsheaders",
     "rest_framework",
     "rest_framework.authtoken",
     "index",
@@ -60,6 +63,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
