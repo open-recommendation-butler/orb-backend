@@ -3,6 +3,7 @@ import { GET } from '../helpers/requests';
 import ArticleListElement from '../components/articleListElement';
 import { useSearchParams } from "react-router-dom";
 import SearchField from '../components/searchField';
+import TopicListElement from '../components/topicListElement';
 
 function SearchPage() {
   let [searchParams, setSearchParams] = useSearchParams();
@@ -22,7 +23,7 @@ function SearchPage() {
   }, []);
 
   return (
-      <div className="container mx-auto pt-16 px-3 mb-20">
+      <div className="container mx-auto pt-16 px-3 mb-40">
         <div className="w-full max-w-xl">
           <SearchField />
           {results && 
@@ -34,10 +35,16 @@ function SearchPage() {
             </div>
           }
         </div>
-        <div className="w-full max-w-xl">
+        <div className="w-full max-w-4xl">
         {results && 
             <div className="mt-10">
-              {results.content.map(article => <ArticleListElement article={article} />)}
+              {results.content.map(content => {
+                return (
+                  content.type === 'topic'
+                    ? <TopicListElement topic={content} />
+                    : <ArticleListElement article={content} />
+                )})
+              }
             </div>
           }
         </div>
