@@ -2,9 +2,9 @@ from article.documents import Article
 import numpy as np
 from .models import Topic
 from sklearn.cluster import DBSCAN
+from datetime import timedelta
 
-
-def sort_in_topics(articles):
+def sort_in_topics(articles, topic_day_span=7):
   X = [a.embedding for a in articles]
   X = np.array(X)
 
@@ -25,13 +25,23 @@ def sort_in_topics(articles):
   for key, value in topics.items():
     if key != -1:
       print()
-      t = Topic()
+      time_spans = []
       for article in value:
+        found = False
+        for t in time_spans:
+          if article.created \
+          and article.created < (t.end_date + timedelta(days=topic_day_span)) \
+          and article.created > (t.start_date - timedelta(days=topic_day_span)):
+            t.add_article(article)
+            found = True
+            break
+        if not found:
+          t = Topic()
+          t.add_article(article)
+          time_spans.append(t)
         print(article.title)
-        t.articles.append(article)
-        t.get_keywords()
-        t.get_article_count()
-      topic_list.append(t)
+
+      topic_list.extend(time_spans)
 
   return topic_list
 
