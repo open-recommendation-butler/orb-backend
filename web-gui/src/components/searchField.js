@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { GET } from '../helpers/requests';
 import { useSearchParams } from "react-router-dom";
 
-function SearchField() {
+function SearchField({ autoFocus=false }) {
   let [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([
@@ -13,17 +13,13 @@ function SearchField() {
     // "München"
   ]);
 
-
   useEffect(() => {
-    let q = searchParams.get('q');
-    // if (q) {
-    //   setQuery(q);
-    // };
+    setQuery(searchParams.get("q"));
   }, []);
 
   let handleSubmit = (event) => {
-    // if (event) event.preventDefault();
-    // search(query);
+    if (event) event.preventDefault();
+    window.location.replace('/search?q=' + query);
   }
 
   return (
@@ -36,9 +32,9 @@ function SearchField() {
         </svg>
         {query &&
           <button 
+            type="reset"
             onClick={() => {
               setQuery("");
-              setSearchParams({q: ""});
             }} 
             className="z-20 absolute inset-y-2/4 -translate-y-1/2 right-3 m-0 p-0 w-[35px] h-[35px]"
           >
@@ -54,19 +50,19 @@ function SearchField() {
           value={query}
           className="z-10 relative placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-full py-3 px-14 shadow-sm focus:outline-none focus:border-slate-600 focus:ring-slate-600 focus:ring-1" 
           type="text" 
-          name="search"
+          name="q"
           maxLength={2048}
           autoCapitalize="off" 
           autoComplete="off" 
           autoCorrect="off" 
-          autoFocus={true}
+          autoFocus={autoFocus}
           onChange={(event) => {
+            console.log('event', event);
             setQuery(event.target.value);
-            setSearchParams({q: event.target.value});
           }}
         />
       </label>
-      {query &&
+      {query && query != searchParams.get("q") &&
         <div className="relative">
           <div className="absolute bg-white border border-slate-300 rounded-2xl py-4 w-full">
             <ul>

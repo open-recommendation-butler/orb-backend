@@ -31,9 +31,13 @@ function SearchPage() {
               {results.suggestion &&
                 <div className="">Meintest du: <a href={`/search?q=${results.suggestion}`}><span className="text-slate-800" dangerouslySetInnerHTML={{__html: results.suggestion_html}} /></a></div>
               }
-              <div className="mt-10">
-                {results.content.map(article => <ArticleListElement article={article} />)}
-              </div>
+            </div>
+          }
+        </div>
+        <div className="w-full max-w-xl">
+        {results && 
+            <div className="mt-10">
+              {results.content.map(article => <ArticleListElement article={article} />)}
             </div>
           }
         </div>
