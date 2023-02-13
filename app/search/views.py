@@ -4,9 +4,11 @@ from article.documents import Article
 import math
 from topic.generate import sort_in_topics
 from article.serializers import ArticleSerializer
+from topic.serializers import TopicSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions
+import time
 
 class SearchView(APIView):
   permission_classes = [permissions.AllowAny]
@@ -16,7 +18,9 @@ class SearchView(APIView):
 
     queryString = request.GET.get('q')
 
-    as_topics = request.GET.get('as_topics', False)
+    as_topics = request.GET.get('as_topics', True)
+
+    topic_day_span = int(request.GET.get('topic_day_span', 7))
 
     content_type = request.GET.get('content_type', 'article')
 
@@ -64,7 +68,7 @@ class SearchView(APIView):
 
     # Query a lot of articles if they are supposed to be sorted in topics
     if as_topics:
-      query = query[:100]
+      query = query[:200]
 
     # Else paginate search
     else:
@@ -106,12 +110,14 @@ class SearchView(APIView):
     
     ### Sort in topics ###
     if as_topics:
-      query = sort_in_topics(query)
-      
+      start = time.time()
+      query = sort_in_topics(query, topic_day_span=topic_day_span)
+      print(query)
+      print('Zeit:', time.time() - start)
       # Sort topics by sum of their scores
       query.sort(key=lambda topic: sum([article.meta.score for article in topic.articles]), reverse=True)
 
-      content = query
+      content = TopicSerializer(query, many=True).data
     else:
       content = ArticleSerializer(query, many=True).data
 
