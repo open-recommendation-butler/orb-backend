@@ -5,9 +5,10 @@ class KeywordsField(serializers.ListField):
     child = serializers.CharField()
 
 class TopicSerializer(serializers.Serializer):
-  title=serializers.CharField()
+  type=serializers.CharField(default="topic")
+  title=serializers.CharField(required=False)
   article_count=serializers.IntegerField()
   category=serializers.CharField(required=False)
-  created=serializers.DateTimeField()
+  created=serializers.DateTimeField(required=False)
   keywords=KeywordsField(required=False)
   articles=ArticleSerializer(many=True)

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 class ArticleSerializer(serializers.Serializer):
+  type=serializers.CharField(default="article")
   org_id = serializers.CharField(required=False)
   title = serializers.CharField(required=False)
   teaser = serializers.CharField(required=False)
