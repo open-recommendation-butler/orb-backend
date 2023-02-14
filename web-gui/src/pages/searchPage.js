@@ -15,22 +15,22 @@ function SearchPage() {
   const HITS_PER_PAGE = 20;
   
 
-  let search = (query) => {
-    GET(`/search/?q=${query}&count=${HITS_PER_PAGE}&page=${searchParams.get('page')}`)
+  let search = (query, p) => {
+    GET(`/search/?q=${query}&count=${HITS_PER_PAGE}&page=${p}`)
       .then(response => setResults(response.data))
   }
   useEffect(() => {
-    let q = searchParams.get('q');
-    if (q) {
-      setQuery(q);
-      search(q);
-    };
     let p = searchParams.get('page');
     if (p) {
       setPage(parseInt(p));
     } else {
       setPage(1);
     }
+    let q = searchParams.get('q');
+    if (q) {
+      setQuery(q);
+      search(q, p);
+    };
   }, []);
 
   useEffect(() => {
@@ -56,7 +56,7 @@ function SearchPage() {
     }
     setPageList(Array.from({length: end - start + 1}, (x, i) => i + start))
   }, [results]);
-  
+
   return (
       <div className="container mx-auto pt-16 px-3 mb-40">
         <div className="w-full max-w-xl">
