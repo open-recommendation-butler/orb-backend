@@ -17,6 +17,12 @@ function SearchField({ autoFocus=false }) {
     setQuery(searchParams.get("q"));
   }, []);
 
+  let handleChange = (event) => {
+    setQuery(event.target.value);
+    GET(`/suggestion/?q=${event.target.value}`)
+      .then(response => setSuggestions(response.data))
+  }
+
   let handleSubmit = (event) => {
     if (event) event.preventDefault();
     window.location.replace('/search?q=' + query);
@@ -56,10 +62,7 @@ function SearchField({ autoFocus=false }) {
           autoComplete="off" 
           autoCorrect="off" 
           autoFocus={autoFocus}
-          onChange={(event) => {
-            console.log('event', event);
-            setQuery(event.target.value);
-          }}
+          onChange={handleChange}
         />
       </label>
       {query && query != searchParams.get("q") &&
