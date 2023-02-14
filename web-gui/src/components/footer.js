@@ -4,7 +4,7 @@ function Footer() {
       <div className="max-w-xl text-sm mx-auto text-center text-slate-700">
         <hr className="mb-8" />
         <div className="font-bold mb-2">About</div>
-        <div className="mb-1">There's more high quality journalism than we think. Way too often it's too hard to find. That's why I'm developing the Open Recommendation Butler.</div>
+        <div className="mb-1">There is more high quality journalism than we find. That is why I am developing the Open Recommendation Butler.</div>
         <div className="mb-8">Tech progress enables the media industry to flourish. Let's make journalism thrive instead of survive <span className="text-slate-600">♥</span></div>
         <div className="font-bold mb-2">Responsible</div>
         <div className="mb-1">
