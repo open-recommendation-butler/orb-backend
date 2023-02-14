@@ -15,7 +15,7 @@ function LandingPage() {
       </div>
 
       <div className="container mx-auto px-3 mb-20 pb-20">
-        <div className="grid md:grid-cols-3 gap-4 mb-14">
+        <div className="grid md:grid-cols-3 gap-4 mb-40">
           <div className="bg-slate-100 rounded-xl p-6">
             <h4 className='font-bold mb-2'>Results that are worth reading</h4>
             <p>It takes time to find the information you are looking for. This solution is optimized on finding high quality information fast.</p>
@@ -31,7 +31,15 @@ function LandingPage() {
         </div>
 
         <div className="container mx-auto px-3 mb-20 pb-20">
-          <h2 className='text-xl font-bold mb-3'>Functions</h2>
+          <div className='grid md:grid-cols-2 rounded-2xl drop-shadow-lg bg-white overflow-hidden'>
+            <div className='px-8 pt-10 pb-5 rounded-2xl drop-shadow-lg bg-white overflow-hidden'>
+              <h3 className='text-2xl font-bold mb-3'>Structured search results thanks to AI</h3>
+              <p>Google shows how it works: People love Google for structured search results. Google uses topic modeling to group news articles in logical topics. With Open Recommendation Butler, you get this technology for free and open source.</p>
+            </div>
+            <div className='flex-col items-center py-5'>
+              <img className='' src={process.env.PUBLIC_URL + '/showcase_topic_modeling.png'} />
+            </div>
+          </div>
         </div>
 
         <div className="grid md:grid-cols-2 rounded-xl bg-slate-200">
