@@ -117,16 +117,19 @@ class SearchView(APIView):
       # Sort topics by sum of their scores
       query.sort(key=lambda topic: sum([article.meta.score for article in topic.articles]) / len(topic.articles), reverse=True)
 
+      hitCount = len(query)
+      query = query[(page - 1) * count:page * count]
       content = TopicSerializer(query, many=True).data
     else:
       content = ArticleSerializer(query, many=True).data
+      hitCount = response.hits.total.value
 
     ### Create context dictionary ###
     context = {
       "content": content,
       "queryString": queryString, 
       "took": (response.took + suggestResponse.took) / 1000, 
-      "hitCount": response.hits.total.value,
+      "hitCount": hitCount,
       "suggestion": suggestion,
       "suggestion_html": suggestion_html,
       "content_type": content_type,
