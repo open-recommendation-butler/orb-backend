@@ -2,27 +2,15 @@ import axios from 'axios';
 
 let DOMAIN = "http://localhost:8000";
 
-let get_headers = async () => {
-  // const user = await refreshToken();
-  // if (user)
-  //   return { Authorization: 'Bearer ' + user.access };
-  return {};
-
-}
-
 export async function GET(path) {
-  let headers = await get_headers();
-  return axios.get(`${DOMAIN}${path}`, {headers: headers})
+  return axios.get(`${DOMAIN}${path}`)
 }
 
-export async function POST(path, data=null, use_auth=true) {
+export async function POST(path, data=null) {
   let headers = {};
-  if (use_auth)
-    headers = await get_headers(); 
-  return axios.post(`${DOMAIN}${path}`, data, {headers: headers})
+  return axios.post(`${DOMAIN}${path}`, data)
 }
 
 export async function DELETE(path) {
-  let headers = await get_headers();
-  return axios.delete(`${DOMAIN}${path}`, {headers: headers})
+  return axios.delete(`${DOMAIN}${path}`)
 }
