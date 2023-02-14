@@ -23,8 +23,12 @@ def sort_in_topics(articles, topic_day_span=7):
 
   topic_list = []
   for key, value in topics.items():
-    if key != -1:
-      print()
+    if key == -1:
+      for article in value:
+        t = Topic()
+        t.add_article(article)
+        topic_list.append(t)
+    else:
       time_spans = []
       for article in value:
         found = False
@@ -39,7 +43,6 @@ def sort_in_topics(articles, topic_day_span=7):
           t = Topic()
           t.add_article(article)
           time_spans.append(t)
-        print(article.title)
 
       topic_list.extend(time_spans)
 

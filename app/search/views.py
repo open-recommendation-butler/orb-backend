@@ -74,9 +74,10 @@ class SearchView(APIView):
     else:
       query = query[(page-1)*count:page*count]
     
+    start = time.time()
     response = query.execute()
     query = list(query)
-
+    print('Transfer Time:', time.time() - start)
     ### Check for suggestions to fix typos made by users ###
 
     suggest = Article.search().suggest(name="my-suggest", text=queryString, term={'field': 'teaser'})
@@ -112,10 +113,9 @@ class SearchView(APIView):
     if as_topics:
       start = time.time()
       query = sort_in_topics(query, topic_day_span=topic_day_span)
-      print(query)
       print('Zeit:', time.time() - start)
       # Sort topics by sum of their scores
-      query.sort(key=lambda topic: sum([article.meta.score for article in topic.articles]), reverse=True)
+      query.sort(key=lambda topic: sum([article.meta.score for article in topic.articles]) / len(topic.articles), reverse=True)
 
       content = TopicSerializer(query, many=True).data
     else:
