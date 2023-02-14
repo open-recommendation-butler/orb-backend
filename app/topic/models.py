@@ -26,6 +26,7 @@ class Topic:
   def get_keywords(self):
     all_occurences = []
     for article in self.articles:
-      all_occurences.extend(article.keywords)
+      if article.keywords:
+        all_occurences.extend(article.keywords)
     counted = Counter(all_occurences)
     self.keywords = [x[0] for x in counted.most_common()]
