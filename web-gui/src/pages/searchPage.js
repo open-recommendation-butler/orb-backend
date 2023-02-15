@@ -24,7 +24,8 @@ function SearchPage() {
     if (p) {
       setPage(parseInt(p));
     } else {
-      setPage(1);
+      p = 1
+      setPage(p);
     }
     let q = searchParams.get('q');
     if (q) {
