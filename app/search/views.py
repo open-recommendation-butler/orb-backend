@@ -60,15 +60,15 @@ class SearchView(APIView):
         #Q('term', content_type=content_type)
       ],
       should=[
-        Q('match', is_paid=True), 
-        Q('match', is_news_agency=False),
+        # Q('match', is_paid=True), 
+        # Q('match', is_news_agency=False),
         Q('distance_feature', field="created", pivot="600d", origin="now", boost=15)
       ]
     )
 
     # Query a lot of articles if they are supposed to be sorted in topics
     if as_topics:
-      query = query[:200]
+      query = query[:100]
 
     # Else paginate search
     else:
