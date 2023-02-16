@@ -165,17 +165,14 @@ ELASTICSEARCH_DSL={
 }
 
 connections.create_connection(
-    #hosts=['https://es01:9200/'], 
-    hosts=['https://localhost:9200/'], 
+    hosts=['https://es01:9200/'], 
     timeout=60,
-    ca_certs='/Users/matthiasmeyer/Documents/Cluster/Archiv/MTL/ORB/ORB/certificates/caServer.crt', 
+    ca_certs='/usr/share/elasticsearch/config/certs/ca/ca.crt', 
     http_auth=("elastic", env("ELASTIC_PASSWORD"))
 )
 
 
 # Load transformer language model
-
 print("Loading language model.")
-#MODEL = SentenceTransformer('T-Systems-onsite/cross-en-de-roberta-sentence-transformer')
-MODLE = None
+MODEL = SentenceTransformer('T-Systems-onsite/cross-en-de-roberta-sentence-transformer')
 print("Language model loaded.")
