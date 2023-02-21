@@ -49,9 +49,12 @@ def sort_in_topics(articles, topic_day_span=7):
   return topic_list
 
 
-def generate_for_all_articles():
+def generate_for_all_articles(topic_day_span=None):
   query = Article.search()
-  query = query.query('match_all')
+  if topic_day_span:
+    query = query.query('range', created={'gte', f'now-{topic_day_span}d/d'})
+  else:
+    query = query.query('match_all')
   response = query.execute()
   
   articles = [a for a in query.scan()]
