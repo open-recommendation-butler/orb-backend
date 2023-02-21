@@ -3,7 +3,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from .documents import Article
 from .serializers import ArticleSerializer
-from elasticsearch import NotFoundError
 from django.http import Http404
 from django.conf import settings
 
@@ -39,7 +38,8 @@ class ArticleView(APIView):
       created=entry.get("created"),
       content_type=entry.get("content_type"),
       portal=entry.get("portal"),
-      category=entry.get("category")
+      category=entry.get("category"),
+      is_paid=entry.get("is_paid")
     )
 
     # Add the embedding
