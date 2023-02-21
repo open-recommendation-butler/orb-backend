@@ -33,12 +33,14 @@ class TopicView(APIView):
     return Response(serializer.data)
 
   def post(self, request, format=None):
+    topic_day_span = int(request.GET.get('topic_day_span'))
+
     # Delete all topics from database
     ct = Clear_Topics()
     ct.handle()
 
     # Generate new topics
-    topics = generate_for_all_articles()
+    topics = generate_for_all_articles(topic_day_span=topic_day_span)
 
     # Save topics
     for topic in topics:
