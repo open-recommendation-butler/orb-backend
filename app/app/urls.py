@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from index.views import index, imprint
 from rest_framework.authtoken import views
 
 urlpatterns = [
@@ -23,8 +22,7 @@ urlpatterns = [
     path("api/article/", include('article.urls')),
     path("api/topic/", include('topic.urls')),
     path("api/suggestion/", include('suggestion.urls')),
-    # path("api/", index, name="index"),
-    path("api/imprint/", imprint, name="imprint"),
+    path("api/logger/", include('logger.urls')),
     path('api/search/', include('search.urls')),
     path('api/api-auth/', include('rest_framework.urls')),
     path('api/api-token-auth/', views.obtain_auth_token)

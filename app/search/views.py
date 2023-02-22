@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from elasticsearch_dsl import Q
 from article.documents import Article
 import math
@@ -55,15 +55,8 @@ class SearchView(APIView):
     query = Article.search()
     query = query.query(
       'bool', 
-      must=[
-        Q('multi_match', query=queryString, fields=['title^3', 'teaser^2', 'fulltext'], fuzziness="AUTO"),
-        #Q('term', content_type=content_type)
-      ],
-      should=[
-        # Q('match', is_paid=True), 
-        # Q('match', is_news_agency=False),
-        Q('distance_feature', field="created", pivot="600d", origin="now", boost=15)
-      ]
+      must=[Q('multi_match', query=queryString, fields=['title^3', 'teaser^2', 'fulltext'], fuzziness="AUTO")],
+      should=[Q('distance_feature', field="created", pivot="600d", origin="now", boost=15)]
     )
 
     # Query a lot of articles if they are supposed to be sorted in topics

@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework",
     "rest_framework.authtoken",
-    "index",
+    "logger",
     "search",
     "suggestion",
     "topic",
