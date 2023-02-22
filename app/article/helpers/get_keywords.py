@@ -15,7 +15,7 @@ forbidden_entities.update(['Die', 'Auch', 'Es', 'Traum', 'Problem', 'Heute', 'Wo
   'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober',
   'November', 'Dezember',
   'Zahlen', 'Sind', 'Nachrichten', 'Politik', 'Wirtschaft', 'Sonstiges', 'Umwelt', 'Kunst', 'Kultur',
-  'Sport'
+  'Sport', 'Lesen'
 ])
 
 def get_keywords(text):
