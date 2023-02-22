@@ -5,6 +5,9 @@ from sklearn.cluster import DBSCAN
 from datetime import timedelta
 
 def sort_in_topics(articles, topic_day_span=7):
+  if len(articles) == 0:
+    return []
+  
   X = [a.embedding for a in articles]
   X = np.array(X)
 
@@ -52,7 +55,7 @@ def sort_in_topics(articles, topic_day_span=7):
 def generate_for_all_articles(topic_day_span=None):
   query = Article.search()
   if topic_day_span:
-    query = query.query('range', created={'gte', f'now-{topic_day_span}d/d'})
+    query = query.query('range', created={'gte': f'now-{topic_day_span}d/d'})
   else:
     query = query.query('match_all')
   response = query.execute()
