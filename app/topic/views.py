@@ -10,10 +10,7 @@ from django.utils import timezone
 from .management.commands.clear_topics import Command as Clear_Topics
 from .serializers import TopicSerializer
 from django.conf import settings
-#import openai
 from collections import Counter
-
-#openai.api_key = settings.OPENAI_API_KEY
 
 class TopicView(APIView):
   def get_object(self, pk):
@@ -53,23 +50,6 @@ class TopicView(APIView):
         # If article has no keywords
         except TypeError:
           pass
-      # if len(topic.articles) > 1:
-      #   print()
-      #   for article in topic.articles:
-
-
-        # if settings.OPENAI_API_KEY:
-          # topic_title = openai.Completion.create(
-          #   model="text-davinci-003", 
-          #   prompt=f'Paraphrasiere in wenigen Wörtern: "{topic.articles[0].title}"', 
-          #   temperature=0.7, 
-          #   max_tokens=30
-          # )
-          # topic_title = topic_title.choices[0].text
-          # topic_title = topic_title.strip()
-          # if topic_title.endswith('.'):
-          #   topic_title = topic_title[:-1]
-          # print('TITLE:', topic_title)
 
       categories_counted = Counter(categories)
       keywords_counted = Counter(keywords)
