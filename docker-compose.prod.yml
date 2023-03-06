@@ -117,7 +117,9 @@ services:
       es01:
         condition: service_healthy
   nginx:
-    build: ./nginx
+    build: 
+      context: .
+      dockerfile: ./nginx/Dockerfile
     ports:
       - 80:80
       - 443:443
