@@ -136,3 +136,6 @@ dmypy.json
 
 
 app/dscan.py
+
+# Dependency directories
+web-gui/node_modules/

@@ -1,21 +1,15 @@
-
 import React, { useState, useEffect } from 'react';
 import { GET } from '../helpers/requests';
 import { useSearchParams } from "react-router-dom";
 
 function SearchField({ autoFocus=false }) {
-  let [searchParams, setSearchParams] = useSearchParams();
+  let [searchParams] = useSearchParams();
   const [query, setQuery] = useState("");
-  const [suggestions, setSuggestions] = useState([
-    // "Angela Merkel",
-    // "Bayern München",
-    // "Marktwirtschaft",
-    // "München"
-  ]);
+  const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
     setQuery(searchParams.get("q"));
-  }, []);
+  }, [searchParams]);
 
   let handleChange = (event) => {
     setQuery(event.target.value);
@@ -33,7 +27,7 @@ function SearchField({ autoFocus=false }) {
       <label className="relative block w-full">
         <span className="sr-only">Suche</span>
         <svg className="z-20 absolute inset-y-2/4 -translate-y-1/2 left-5" width="20" height="20" viewBox="0 0 477 448" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="176" cy="176" r="157" stroke="#475569" strokeWidth="55"/>
+          <circle cx="184" cy="176" r="157" stroke="#475569" strokeWidth="55"/>
           <path d="M298 269L463.5 434.5" stroke="#475569" strokeWidth="55"/>
         </svg>
         {query &&
@@ -65,7 +59,7 @@ function SearchField({ autoFocus=false }) {
           onChange={handleChange}
         />
       </label>
-      {query && query != searchParams.get("q") &&
+      {query && query !== searchParams.get("q") &&
         <div className="relative">
           <div className="absolute bg-white border border-slate-300 rounded-2xl py-4 w-full">
             <ul>
@@ -73,7 +67,7 @@ function SearchField({ autoFocus=false }) {
               <a href={`/search?q=${suggestion}`}>
                 <li className="pl-14 pr-4 py-2 hover:bg-slate-100 relative">
                   <svg className="z-20 absolute inset-y-2/4 -translate-y-1/2 left-5" width="20" height="20" viewBox="0 0 477 448" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="176" cy="176" r="157" stroke="#475569" strokeWidth="55"/>
+                    <circle cx="184" cy="176" r="157" stroke="#475569" strokeWidth="55"/>
                     <path d="M298 269L463.5 434.5" stroke="#475569" strokeWidth="55"/>
                   </svg>
                   <div>{suggestion}</div>
