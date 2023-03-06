@@ -1,4 +1,4 @@
-from elasticsearch_dsl import Document, Integer, analyzer, Completion, token_filter, Keyword
+from elasticsearch_dsl import Document, Integer, analyzer, Completion, token_filter, Keyword, DenseVector
 from itertools import permutations
 
 # custom analyzer for names
@@ -13,6 +13,10 @@ class Suggestion(Document):
   name = Keyword()
   suggest = Completion(analyzer=ascii_fold)
   occurences = Integer()
+  embedding = DenseVector(
+    dims=768,
+    multi=True
+  )
 
   def clean(self):
     """
