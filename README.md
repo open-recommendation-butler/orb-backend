@@ -1,33 +1,37 @@
-# Open Recommendation Butler (ORB)
-ORB helps news readers to find information faster by developing an open source toolbox knowledge-based thematic recommendations and search results.
+# Open Recommendation Butler - Find what feels missing
+Good search is complex to implement. Every day media houses loose traffic to Google. This open source project is an easy to implement state of the art AI powered search engine for media houses.
 
+<a href="https://github.com/open-recommendation-butler"> 🏠 Project side</a>: Learn more about the project
 
-This is a django wrapper around an ElasticSearch engine. It's optimized for publishers.
+<a href="https://open-recommendation-butler.tech/"> 🌐 Demo</a>: Check out the power
 
--> See the full [ORB on Github](https://github.com/open-recommendation-butler)
+<a href="https://open-recommendation-butler.github.io/Docs/">📑 Docs</a>: Get started in a few minutes
+
+<img src="https://user-images.githubusercontent.com/40501887/221694829-5e90816f-f723-45cc-8409-ccee7ba90860.jpg" width="750" title="Screenshot of Open Recommendation Butler showing its functionality">
 
 ## How to get started
 
 You can start ORB on your machine with docker by following these steps:
 
-1. Clone the repository
+- Clone the repository
 
 ```bash
 git clone https://github.com/open-recommendation-butler/ORB.git
 ```
 
-2. Change directory to project directory
+- Change directory to project directory
 
 ```bash
 cd ORB
 ```
 
-3. Create a file with the name ".env".
+- Create a file with the name ".env".
 
-4. Insert the following content into the ".env" file. Replace *YourStrongPasswordForElasticSearch*, *YourStrongPasswordForKibana* and *YourStrongSecretKeyForDjango* with your own passwords.
+- Insert the following content into the ".env" file. Replace *YourStrongPasswordForElasticSearch*, *YourStrongPasswordForKibana* and *YourStrongSecretKeyForDjango* with your own passwords.
 
-Content of ".env" file:
 ```bash
+# Content of ".env" file:
+
 # Password for the 'elastic' user (at least 6 characters)
 ELASTIC_PASSWORD=YourStrongPasswordForElasticSearch
 
@@ -38,32 +42,26 @@ KIBANA_PASSWORD=YourStrongPasswordForKibana
 SECRET_KEY=YourStrongSecretKeyForDjango
 ```
 
-5. Compose the docker
+- Compose the docker
 ```bash
 docker compose build
 ```
 
-6. Compose the docker
+- Compose the docker
 ```bash
 docker compose up -d
 ```
 
-7. Test if ORB is running by visiting [http://localhost:8000](http://localhost:8000).
+- Test if ORB is running by visiting [http://localhost:8000](http://localhost:8000).
 
-## Tutorials
+<a href="https://open-recommendation-butler.github.io/Docs/">For more see full documentation here.</a>
 
-[1. How to add documents to the database?](../main/tutorials/1-adding-documents-to-the-database/adding-documents-to-the-database.md)
+## Sponsors
 
-[2. How to search for documents with the API?](../main/tutorials/2-searching-for-documents/searching-for-documents.md)
+This project is gracefully funded by:
 
-[3. How to add the News Category Dataset to the database?](../main/tutorials/adding-news-category-dataset/addingg-news-category-dataset.md)
+<a href="https://media-tech-lab.com">Media Tech Lab by Media Lab Bayern</a>
 
-[4. How to deploy on a production server?](../main/tutorials/4-deploy-orb/deploy-orb.md)
-
-## Supported by
-
-Media Tech Lab [`media-tech-lab`](https://github.com/media-tech-lab)
-
-<a href="https://www.media-lab.de/en/programs/media-tech-lab">
-    <img src="https://raw.githubusercontent.com/media-tech-lab/.github/main/assets/mtl-powered-by.png" width="240" title="Media Tech Lab powered by logo">
+<a href="https://media-tech-lab.com">
+    <img src="https://user-images.githubusercontent.com/40501887/223163776-2b549037-6106-4c1d-a4eb-078b94da1831.png" width="70" title="Media Lab logo">
 </a>
