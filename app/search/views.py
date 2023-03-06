@@ -113,6 +113,27 @@ class SearchView(APIView):
       content = ArticleSerializer(query, many=True).data
 
 
+    ### Get correction ###
+    correct = Article.search().suggest(name="my-suggest", text=queryString, term={'field': 'teaser'})
+    correctResponse = correct.execute()
+
+    correction = []
+    correction_html = []
+
+    for token in correctResponse.suggest['my-suggest']:
+      try:
+        correction.append(token['options'][0]['text'])
+        correction_html.append(f"<b><i>{token['options'][0]['text']}</i></b>")
+      except IndexError:
+        correction.append(token['text'])
+        correction_html.append(token['text'])
+
+    correction = " ".join(correction)
+    correction_html = " ".join(correction_html)
+    if correction.lower() == queryString.lower():
+      correction = None
+      correction_html = None
+
 
     ### Create context dictionary ###
     context = {
@@ -123,7 +144,9 @@ class SearchView(APIView):
       "as_topics": as_topics,
       "page": page,
       "pageCount": pageCount,
-      "similar_search_requests": similar_search_requests
+      "similar_search_requests": similar_search_requests,
+      "correction": correction,
+      "correction_html": correction_html
     }
 
     return Response(context)
