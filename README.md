@@ -1,7 +1,7 @@
 # Open Recommendation Butler - Find what feels missing
 Good search is complex to implement. Every day media houses loose traffic to Google. This open source project is an easy to implement state of the art AI powered search engine for media houses.
 
-<a href="https://github.com/open-recommendation-butler"> 🌐 Project side</a>: Learn more
+<a href="https://github.com/open-recommendation-butler"> 🏠 Project side</a>: Learn more about the project
 
 <a href="https://open-recommendation-butler.tech/"> 🌐 Demo</a>: Check out the power
 
