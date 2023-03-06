@@ -1,6 +1,6 @@
-from django.shortcuts import redirect
 from elasticsearch_dsl import Q
 from article.documents import Article
+from topic.documents import Topic
 import math
 from topic.generate import sort_in_topics
 from article.serializers import ArticleSerializer
@@ -8,7 +8,10 @@ from topic.serializers import TopicSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions
-import time
+from rest_framework.exceptions import ValidationError
+from collections import Counter
+
+CONTENT_TYPES = ['all', 'article', 'podcast']
 
 class SearchView(APIView):
   permission_classes = [permissions.AllowAny]
@@ -18,116 +21,109 @@ class SearchView(APIView):
 
     queryString = request.GET.get('q')
 
-    as_topics = request.GET.get('as_topics', True)
+    content_type = request.GET.get('content_type', 'all')
 
-    topic_day_span = int(request.GET.get('topic_day_span', 7))
+    category = request.GET.get('category')
 
-    content_type = request.GET.get('content_type', 'article')
+    publisher = request.GET.get('publisher')
+
+    as_topics = False
+    if content_type == 'all' and not publisher:
+      as_topics = request.GET.get('as_topics', True)
 
     count = int(request.GET.get('count', 20))
 
     # Default to "article" as content type if no valid content type is provided
-    if content_type not in ['podcast', 'gallery', 'multimedia']:
-      content_type = 'article'
+    if content_type not in CONTENT_TYPES:
+      raise ValidationError(f"'content_type' parameter must be one of the following: {', '.join(CONTENT_TYPES)}.")
     
     page = request.GET.get('page', 1)
 
     try:
       page = int(page)
     except ValueError:
-      # Redirect to first page if page parameter is not a number
-      return redirect(f'/search/?q={queryString}&content_type={content_type}')
+      # Raise error if page is not an integer
+      raise ValidationError("'page' parameter is not an integer.")
     
     # Redirect to first page if page parameter is smaller than 1
     if page < 1:
-      redirect(f'/search/?q={queryString}&content_type={content_type}')
+      raise ValidationError("'page' parameter cannot be negative or 0.")
 
     if page > 1000:
-      page = 1000
+      raise ValidationError("'page' parameter cannot larger than 1000.")
 
     # Return to index page if query is empty
     if not queryString:
-      return redirect('index')
+      raise ValidationError("'q' parameter is missing.")
 
 
     ### Execute search in ElasticSearch database ###
-
-    query = Article.search()
-    query = query.query(
-      'bool', 
-      must=[Q('multi_match', query=queryString, fields=['title^3', 'teaser^2', 'fulltext'], fuzziness="AUTO")],
-      should=[Q('distance_feature', field="created", pivot="600d", origin="now", boost=15)]
-    )
-
-    # Query a lot of articles if they are supposed to be sorted in topics
     if as_topics:
-      query = query[:100]
-
-    # Else paginate search
+      query = Topic.search()
+      query = query.query(
+        'bool', 
+        must=[Q('multi_match', query=queryString, fields=['title^3', 'teaser^2', 'fulltext'], fuzziness="AUTO")],
+        should=[Q('distance_feature', field="end_date", pivot="100d", origin="now", boost=15)]
+      )
     else:
-      query = query[(page-1)*count:page*count]
+      query = Article.search()
+      query = query.query(
+        'bool', 
+        must=[Q('multi_match', query=queryString, fields=['title^3', 'teaser^2', 'fulltext'], fuzziness="AUTO")],
+        should=[Q('distance_feature', field="created", pivot="100d", origin="now", boost=15)]
+      )
+      if content_type != 'all':
+        query = query.filter('term', content_type=content_type)
+      
+      if publisher:
+        query = query.filter('term', portal=publisher)
     
-    start = time.time()
+    if category:
+      query = query.filter('term', category=category)
+
+    # Paginate search
+    query = query[(page-1)*count:page*count]
+    
     response = query.execute()
     query = list(query)
-    print('Transfer Time:', time.time() - start)
-    ### Check for suggestions to fix typos made by users ###
 
-    suggest = Article.search().suggest(name="my-suggest", text=queryString, term={'field': 'teaser'})
-    suggestResponse = suggest.execute()
-
-    suggestion = []
-    suggestion_html = []
-
-    for token in suggestResponse.suggest['my-suggest']:
-      try:
-        suggestion.append(token['options'][0]['text'])
-        suggestion_html.append(f"<b><i>{token['options'][0]['text']}</i></b>")
-      except IndexError:
-        suggestion.append(token['text'])
-        suggestion_html.append(token['text'])
-
-    suggestion = " ".join(suggestion)
-    suggestion_html = " ".join(suggestion_html)
-    if suggestion.lower() == queryString.lower():
-      suggestion = None
-      suggestion_html = None
-
-    ### Execute checks ###
-
-    # Redirect to highest possible page if page parameter is bigger than highest possible page
-    pageCount = None
-    if not as_topics:
-      pageCount = math.ceil(response.hits.total.value / 10)
-      if pageCount > 0 and page > pageCount:
-        return redirect(f'/search/?q={queryString}&content_type={content_type}&page={pageCount}')
+    # Raise error if page parameter is bigger than highest possible page
+    pageCount = math.ceil(response.hits.total.value / 10)
+    if pageCount > 0 and page > pageCount:
+      raise ValidationError(f"'page' parameter is bigger than highest possible page. Highest possible page is: {pageCount}")
     
-    ### Sort in topics ###
+    ### Get similar search requests ###
+    similar_search_requests = []
     if as_topics:
-      start = time.time()
-      query = sort_in_topics(query, topic_day_span=topic_day_span)
-      print('Zeit:', time.time() - start)
-      # Sort topics by sum of their scores
-      query.sort(key=lambda topic: sum([article.meta.score for article in topic.articles]) / len(topic.articles), reverse=True)
+      for topic in query:
+        for article in topic.articles:
+          if article.keywords:
+            similar_search_requests.extend(article.keywords)
+    else:
+      for article in query:
+        if article.keywords:
+          similar_search_requests.extend(article.keywords)
+    similar_search_requests = [x for x in similar_search_requests if x.lower() != queryString.lower()]
+    similar_search_requests = [x[0] for x in Counter(similar_search_requests).most_common(6)]
 
-      hitCount = len(query)
-      query = query[(page - 1) * count:page * count]
+    ### Serialize query ###
+    if as_topics:
       content = TopicSerializer(query, many=True).data
     else:
       content = ArticleSerializer(query, many=True).data
-      hitCount = response.hits.total.value
+
+
 
     ### Create context dictionary ###
     context = {
       "content": content,
       "queryString": queryString, 
-      "took": (response.took + suggestResponse.took) / 1000, 
-      "hitCount": hitCount,
-      "suggestion": suggestion,
-      "suggestion_html": suggestion_html,
-      "content_type": content_type,
+      "took": response.took / 1000, 
+      "hitCount": response.hits.total.value,
+      "as_topics": as_topics,
       "page": page,
-      "pageCount": pageCount
+      "pageCount": pageCount,
+      "similar_search_requests": similar_search_requests
     }
 
     return Response(context)
