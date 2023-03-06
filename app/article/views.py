@@ -5,6 +5,9 @@ from .documents import Article
 from .serializers import ArticleSerializer
 from django.http import Http404
 from django.conf import settings
+from topic.generate import find_topic
+import dateparser
+from article.helpers.get_keywords import get_keywords
 
 class ArticleView(APIView):
   """
@@ -35,7 +38,7 @@ class ArticleView(APIView):
       teaser=entry.get("teaser"),
       fulltext=entry.get("fulltext"),
       url=entry.get("url"),
-      created=entry.get("created"),
+      created=dateparser.parse(entry.get("created")),
       content_type=entry.get("content_type"),
       portal=entry.get("portal"),
       category=entry.get("category"),
@@ -51,8 +54,16 @@ class ArticleView(APIView):
       )
     )
 
+    a.keywords = get_keywords(
+      "\n\n".join(
+        [x for x in (a.title, a.teaser, a.fulltext) if x]
+      )
+    )
+
     # Save the article
     a.save()
+
+    find_topic(a)
 
   def post(self, request, format=None):
 
