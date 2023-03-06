@@ -1,6 +1,7 @@
-from elasticsearch_dsl import Document, InnerDoc, Date, Text, Keyword, Boolean, Integer, DenseVector, analyzer, Completion, token_filter
+from elasticsearch_dsl import Document, InnerDoc, Date, Text, Keyword, Boolean, Integer, DenseVector, analyzer, Completion, token_filter, Float
 from article.helpers.get_keywords import get_keywords
 from suggestion.documents import Suggestion
+from django.conf import settings
 
 raw_strip = analyzer('raw_strip',
   tokenizer="whitespace"
@@ -31,11 +32,11 @@ class Article(Document):
   is_news_agency = Boolean()
   keywords = Keyword()
   embedding = DenseVector(
-    dims=768
+    dims=768,
+    multi=True
   )
 
   def save(self):
-    self.keywords = get_keywords(" ".join([x for x in [self.title, self.teaser, self.fulltext] if x]))
     super().save()
 
     # Iterate through all keywords
@@ -53,7 +54,7 @@ class Article(Document):
         query[0].occurences += 1
         query[0].save()
       else:
-        s = Suggestion(name=keyword, occurences=1)
+        s = Suggestion(name=keyword, occurences=1, embedding=list(settings.MODEL.encode(keyword)))
         s.save()
 
   class Index:
@@ -82,6 +83,4 @@ class ArticleInner(InnerDoc):
   word_count = Integer()
   is_news_agency = Boolean()
   keywords = Keyword()
-  embedding = DenseVector(
-    dims=768
-  )
+  embedding = Float()
