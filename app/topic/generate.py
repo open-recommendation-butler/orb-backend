@@ -1,8 +1,64 @@
-from article.documents import Article
+from article.documents import Article, ArticleInner
 import numpy as np
-from .models import Topic
+#from .models import Topic
 from sklearn.cluster import DBSCAN
 from datetime import timedelta
+from .documents import Topic
+from elasticsearch_dsl import Q
+from numpy import dot
+from numpy.linalg import norm
+import numpy as np
+from datetime import timedelta
+
+def sim(a, b):
+  return dot(a, b) / (norm(a) * norm(b))
+
+DSBCAN_EPS = 0.35
+DBSCAN_MINPTS = 2
+
+def find_topic(article):
+  query = Topic.search()
+  query = query.query(
+    'bool', 
+    must=[
+      Q(
+        'multi_match', 
+        query="\n".join([x for x in [article.title, article.teaser, article.fulltext][:500] if x]), 
+        fields=['title^3', 'teaser^2', 'fulltext'], 
+        fuzziness="AUTO"
+      ),
+      Q(
+        'range', 
+        start_date={'gte': article.created - timedelta(days=3), 'lte': article.created + timedelta(days=3)}
+      ),
+    ],
+  )
+  query = query[:40]
+  query.execute()
+  query = list(query)
+
+  article_embedding = np.array(article.embedding)
+  print('query size', len(query))
+  for topic in query:
+    if topic.article_count == 1:
+      continue
+
+    close_pts = 0
+    for other_article in topic.articles: 
+      if sim(article_embedding, np.array(other_article.embedding)) >= DSBCAN_EPS:
+        close_pts += 1
+    if close_pts >= DBSCAN_MINPTS:
+      topic.add_article(article)
+      return
+  
+  for topic in query:
+    if topic.article_count == 1 and sim(article_embedding, topic.articles[0].embedding) >= DSBCAN_EPS:
+      topic.add_article(article)
+      return
+  
+  topic = Topic()
+  topic.add_article(article)
+
 
 def sort_in_topics(articles, topic_day_span=7):
   if len(articles) == 0:
