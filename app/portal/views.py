@@ -2,8 +2,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search
-
+from rest_framework import permissions
 class PortalView(APIView):
+  permission_classes = [permissions.AllowAny]
+
   def get(self, request, format=None):
     s = Search()
     s = Search.from_dict({
