@@ -20,6 +20,8 @@ from rest_framework.authtoken import views
 urlpatterns = [
     path("api/admin/", admin.site.urls),
     path("api/article/", include('article.urls')),
+    path("api/category/", include('category.urls')),
+    path("api/portal/", include('portal.urls')),
     path("api/topic/", include('topic.urls')),
     path("api/suggestion/", include('suggestion.urls')),
     path("api/logger/", include('logger.urls')),
