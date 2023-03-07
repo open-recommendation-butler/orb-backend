@@ -8,7 +8,7 @@ function TopicListElement({ topic }) {
 
   return (
     <div className='mb-4 border-b border-slate-300 py-1'>
-      <p className='text-m font-bold'>{topic.keywords.slice(0,3).map((keyword, index) => 
+      <p className='text-m font-bold'>{topic.keywords && topic.keywords.slice(0,3).map((keyword, index) => 
         <>
           {index !== 0 ? ', ' : ''}
           <a className='hover:underline' href={`/search?q=${keyword}${searchParams.get('content_type') ? '&content_type=' + searchParams.get('content_type') : ''}${searchParams.get('publisher') ? '&publisher=' + searchParams.get('publisher') : ''}${searchParams.get('category') ? '&category=' + searchParams.get('category') : ''}`}>{keyword}</a>
