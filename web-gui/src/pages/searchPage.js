@@ -17,26 +17,12 @@ function SearchPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [showCategories, setShowCategories] = useState(false);
   const [showPublishers, setShowPublishers] = useState(false);
-
-  const categories = [
-    'Any category',
-    'Politik',
-    'Panorama',
-    'Sport',
-    'Wirtschaft',
-    'Kultur',
-    'Technik',
-    'Reise',
-    'Auto',
-    'Gesundheit',
-    'Wissen'
-  ]
-
-   const publishers = ['Any publisher', 'taz, die tageszeitung']
+  const [categories, setCategores] = useState(["Any category"]);
+  const [publishers, setPublishers] = useState(["Any publisher"]);
 
   const HITS_PER_PAGE = 20;
   
-
+  
   let search = (query, p, contentType, category, publisher) => {
     GET(`/search/?q=${query}&count=${HITS_PER_PAGE}&page=${p}${contentType ? '&content_type=' + contentType : ''}${category ? '&category=' + category : ''}${publisher ? '&publisher=' + publisher : ''}`)
       .then(response => {
@@ -44,6 +30,10 @@ function SearchPage() {
       })
   }
   useEffect(() => {
+    GET('/portal/')
+      .then(response => setPublishers(publishers.concat(response.data)));
+    GET('/category/')
+      .then(response => setCategores(categories.concat(response.data)));
     let p = searchParams.get('page');
     let contentType = searchParams.get('content_type');
     let category = searchParams.get('category');
@@ -89,7 +79,7 @@ function SearchPage() {
     }
     setPageList(Array.from({length: end - start + 1}, (x, i) => i + start))
   }, [results, page]);
-  console.log('results.content', results)
+
   return (
       <div className="container mx-auto pt-16 px-3 mb-40">
         <div className="w-full max-w-xl">
@@ -135,7 +125,7 @@ function SearchPage() {
             <div className='mt-1 text-sm ml-1 flex'>
               <div className='relative'>
                 <button 
-                  className="rounded-xl px-3 py-1 hover:bg-slate-300 flex items-center" 
+                  className="rounded-xl px-3 py-1 hover:bg-slate-300 flex items-center truncate text-ellipsis overflow-hidden" 
                   onClick={() => {setShowCategories(!showCategories); setShowPublishers(false)}}
                 >
                   {category ? category : 'Any category'}
@@ -157,7 +147,7 @@ function SearchPage() {
               </div>
               <div className='relative'>
                 <button 
-                  className="rounded-xl px-3 py-1 hover:bg-slate-300 flex items-center" 
+                  className="rounded-xl px-3 py-1 hover:bg-slate-300 flex items-center truncate text-ellipsis overflow-hidden" 
                   onClick={() => {setShowPublishers(!showPublishers); setShowCategories(false)}}
                 >
                   {publisher ? publisher : 'Any publisher'}
