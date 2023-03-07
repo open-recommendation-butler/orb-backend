@@ -32,11 +32,14 @@ class ArticleView(APIView):
 
   def save(self, entry):
     # Create a new article document and save it to the ElasticSearch database
+    fulltext = entry.get("fulltext")
+    if fulltext:
+      fulltext = fulltext[:8000]
     a = Article(
       org_id=entry.get("org_id"),
       title=entry.get("title"),
       teaser=entry.get("teaser"),
-      fulltext=entry.get("fulltext"),
+      fulltext=fulltext,
       url=entry.get("url"),
       created=dateparser.parse(entry.get("created")),
       content_type=entry.get("content_type"),
@@ -68,7 +71,7 @@ class ArticleView(APIView):
   def post(self, request, format=None):
 
     # Ignore articles whose url is already in the database
-    if request.data.get("url"):
+    if request.data.get("url") and request.data.get('content_type') == 'article':
       query = Article.search().filter("term", url=request.data.get("url"))
       response = query.execute()
       if response.hits.total.value != 0:
@@ -76,7 +79,7 @@ class ArticleView(APIView):
 
     # Ignore articles whose id is already in the database
     if request.data.get("org_id") and self.get_object(request.data.get("org_id")):
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+      return Response(status=status.HTTP_400_BAD_REQUEST)
 
     if isinstance(request.data, list):
       for i, entry in enumerate(request.data):
