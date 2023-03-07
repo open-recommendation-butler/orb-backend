@@ -169,7 +169,7 @@ ELASTICSEARCH_DSL={
 connections.create_connection(
     hosts=['https://es01:9200/'], 
     timeout=60,
-    ca_certs='/Users/matthiasmeyer/Documents/Karriere/Cluster/Archiv/MTL/ORB/ORB/certificates/caServer.crt', 
+    ca_certs='/usr/share/elasticsearch/config/certs/ca/ca.crt', 
     http_auth=("elastic", env("ELASTIC_PASSWORD"))
 )
 
