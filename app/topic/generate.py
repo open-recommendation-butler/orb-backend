@@ -18,12 +18,13 @@ DBSCAN_MINPTS = 2
 
 def find_topic(article):
   query = Topic.search()
+  queryString = "\n".join([x for x in [article.title, article.teaser, article.fulltext] if x])
   query = query.query(
     'bool', 
     must=[
       Q(
         'multi_match', 
-        query="\n".join([x for x in [article.title, article.teaser, article.fulltext][:500] if x]), 
+        query=queryString[:100], 
         fields=['title^3', 'teaser^2', 'fulltext'], 
         fuzziness="AUTO"
       ),
