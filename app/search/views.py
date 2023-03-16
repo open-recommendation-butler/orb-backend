@@ -69,7 +69,7 @@ class SearchView(APIView):
       query = Article.search()
       query = query.query(
         'bool', 
-        must=[Q('multi_match', query=queryString, fields=['title^3', 'teaser^2', 'fulltext'], fuzziness="AUTO")],
+        must=[Q('multi_match', query=queryString, fields=['title^3', 'teaser^2', 'fulltext'])],
         should=[Q('distance_feature', field="created", pivot="100d", origin="now", boost=15)]
       )
       if content_type != 'all':
@@ -77,12 +77,14 @@ class SearchView(APIView):
       
       if publisher:
         query = query.filter('term', portal=publisher)
-    
+      
     if category:
       query = query.filter('term', category=category)
 
     # Paginate search
     query = query[(page-1)*count:page*count]
+    query = query.highlight('teaser', number_of_fragments=1, pre_tags="<em class='font-bold'>", post_tags="</em>", fragment_size=240, boundary_scanner_locale='de-DE')
+    query = query.highlight('fulltext', number_of_fragments=1, pre_tags="<em class='font-bold'>", post_tags="</em>", fragment_size=240, boundary_scanner_locale='de-DE')
     
     response = query.execute()
     query = list(query)
@@ -108,9 +110,9 @@ class SearchView(APIView):
 
     ### Serialize query ###
     if as_topics:
-      content = TopicSerializer(query, many=True).data
+      content = TopicSerializer(response, many=True).data
     else:
-      content = ArticleSerializer(query, many=True).data
+      content = ArticleSerializer(response, many=True).data
 
 
     ### Get correction ###
