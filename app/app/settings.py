@@ -37,7 +37,7 @@ ALLOWED_HOSTS = [env("DOMAIN", default=""), '.localhost', '127.0.0.1', '[::1]']
 
 CSRF_TRUSTED_ORIGINS = [f'http://{env("DOMAIN", default="")}', f'https://{env("DOMAIN", default="")}', 'http://localhost', 'http://127.0.0.1']
 
-CORS_ALLOWED_ORIGINS = ['http://localhost:3000', 'https://open-recommendation-butler.tech']
+CORS_ALLOWED_ORIGINS = ['http://localhost:3000', 'https://open-recommendation-butler.tech', 'https://omr.open-recommendation-butler.tech']
 
 # Application definition
 
