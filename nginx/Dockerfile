@@ -5,6 +5,7 @@ COPY nginx/nginx.conf /etc/nginx/conf.d
 
 RUN mkdir /home/web-gui
 COPY web-gui/build /home/web-gui/
+RUN mkdir /home/omr
 COPY omr/build /home/omr/
 
 RUN mkdir /etc/apache2
