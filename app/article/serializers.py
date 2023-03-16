@@ -11,3 +11,13 @@ class ArticleSerializer(serializers.Serializer):
   keywords = serializers.ListField(required=False)
   url = serializers.URLField(required=False)
   created = serializers.DateTimeField(required=False)
+  highlight = serializers.SerializerMethodField()
+
+  def get_highlight(self, obj):
+    try:
+      try:
+        return obj.meta.highlight.teaser[0]
+      except:
+        return obj.meta.highlight.fulltext[0]
+    except:
+      return obj.teaser
