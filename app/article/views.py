@@ -32,14 +32,11 @@ class ArticleView(APIView):
 
   def save(self, entry):
     # Create a new article document and save it to the ElasticSearch database
-    fulltext = entry.get("fulltext")
-    if fulltext:
-      fulltext = fulltext[:8000]
     a = Article(
       org_id=entry.get("org_id"),
       title=entry.get("title"),
       teaser=entry.get("teaser"),
-      fulltext=fulltext,
+      fulltext=entry.get("fulltext"),
       url=entry.get("url"),
       created=dateparser.parse(entry.get("created")),
       content_type=entry.get("content_type"),
@@ -59,7 +56,7 @@ class ArticleView(APIView):
 
     a.keywords = get_keywords(
       "\n\n".join(
-        [x for x in (a.title, a.teaser, a.fulltext) if x]
+        [x[:1000] for x in (a.title, a.teaser, a.fulltext) if x]
       )
     )
 
@@ -90,7 +87,9 @@ class ArticleView(APIView):
     return Response(status=status.HTTP_201_CREATED)
 
 
-  def delete(self, request, pk, format=None):
-      a = self.get_object(pk)
+  def delete(self, request, org_id, format=None):
+      a = self.get_object(org_id)
+      if not a:
+        raise Http404
       a.delete()
       return Response(status=status.HTTP_204_NO_CONTENT)
