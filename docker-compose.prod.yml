@@ -94,7 +94,7 @@ services:
       timeout: 10s
       retries: 120
     restart: always
-  backend:
+  django:
     build: 
       context: .
       dockerfile: ./app/Dockerfile
