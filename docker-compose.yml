@@ -120,7 +120,7 @@ services:
       interval: 10s
       timeout: 10s
       retries: 120
-  web:
+  django:
     build: 
       context: .
       dockerfile: ./app/Dockerfile

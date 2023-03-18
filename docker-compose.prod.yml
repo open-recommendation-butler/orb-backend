@@ -94,7 +94,7 @@ services:
       timeout: 10s
       retries: 120
     restart: always
-  web:
+  backend:
     build: 
       context: .
       dockerfile: ./app/Dockerfile
@@ -112,27 +112,15 @@ services:
     restart: always
     volumes:
       - certs:/usr/share/elasticsearch/config/certs
-      - static_volume:/home/app/web/staticfiles
+      - backend_static_volume:/home/app/web/staticfiles
     depends_on:
       es01:
         condition: service_healthy
-  nginx:
-    build: 
-      context: .
-      dockerfile: ./nginx/Dockerfile
-    ports:
-      - 80:80
-      - 443:443
-    depends_on:
-      - web
-    restart: always
-    volumes:
-      - static_volume:/home/app/web/staticfiles
 
 volumes:
   certs:
     driver: local
   esdata01:
     driver: local
-  static_volume:
+  backend_static_volume:
     driver: local
