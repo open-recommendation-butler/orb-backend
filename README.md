@@ -5,7 +5,7 @@ Good search is complex to implement. Every day media houses loose traffic to Goo
 
 <a href="https://open-recommendation-butler.tech/"> 🌐 Demo</a>: Check out the power
 
-<a href="https://open-recommendation-butler.github.io/Docs/">📑 Docs</a>: Get started in a few minutes
+<a href="https://open-recommendation-butler.github.io/orb-docs/">📑 Docs</a>: Get started in a few minutes
 
 <img src="https://user-images.githubusercontent.com/40501887/221694829-5e90816f-f723-45cc-8409-ccee7ba90860.jpg" width="750" title="Screenshot of Open Recommendation Butler showing its functionality">
 
