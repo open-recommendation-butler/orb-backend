@@ -31,5 +31,7 @@ RUN touch db.sqlite3
 # chown all the files to the app user
 RUN chown -cR app $HOME
 
+RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('T-Systems-onsite/cross-en-de-roberta-sentence-transformer');"
+
 # change to the app user
 USER app
