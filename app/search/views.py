@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework import permissions
 from rest_framework.exceptions import ValidationError
 from collections import Counter
+from django.conf import settings
 
 CONTENT_TYPES = ['all', 'article', 'podcast']
 
@@ -28,7 +29,7 @@ class SearchView(APIView):
     publisher = request.GET.get('publisher')
 
     as_topics = False
-    if content_type == 'all' and not publisher:
+    if content_type == 'all' and not publisher and settings.USE_TOPIC_MODELING:
       as_topics = request.GET.get('as_topics', True)
 
     count = int(request.GET.get('count', 20))

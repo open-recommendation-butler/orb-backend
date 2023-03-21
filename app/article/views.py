@@ -42,18 +42,25 @@ class ArticleView(APIView):
       content_type=entry.get("content_type"),
       portal=entry.get("portal"),
       category=entry.get("category"),
-      is_paid=entry.get("is_paid")
+      is_paid=entry.get("is_paid"),
+      keywords=entry.get("keywords")
     )
 
-    # Add the embedding
-    a.embedding = list(
-      settings.MODEL.encode(
-        "\n\n".join(
-            [x for x in (a.title, a.teaser, a.fulltext) if x]
-          )
+    # Optionally add embedding for topic modeling
+    if settings.USE_TOPIC_MODELING:
+      # Add the embedding
+      a.embedding = list(
+        settings.MODEL.encode(
+          "\n\n".join(
+              [x for x in (a.title, a.teaser, a.fulltext) if x]
+            )
+        )
       )
-    )
 
+      # Model topic
+      find_topic(a)
+
+    # Calculate keywords if none present
     a.keywords = get_keywords(
       "\n\n".join(
         [x[:1000] for x in (a.title, a.teaser, a.fulltext) if x]
@@ -62,8 +69,6 @@ class ArticleView(APIView):
 
     # Save the article
     a.save()
-
-    find_topic(a)
 
   def post(self, request, format=None):
 
