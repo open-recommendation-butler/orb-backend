@@ -16,8 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework.authtoken import views
+from django.shortcuts import render
+
+def index(request):
+    return render(request, 'index.html')
 
 urlpatterns = [
+    path("", index, name='index'),
     path("api/admin/", admin.site.urls),
     path("api/article/", include('article.urls')),
     path("api/category/", include('category.urls')),
@@ -28,4 +33,4 @@ urlpatterns = [
     path('api/search/', include('search.urls')),
     path('api/api-auth/', include('rest_framework.urls')),
     path('api/api-token-auth/', views.obtain_auth_token)
-]
+    ]
