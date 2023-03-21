@@ -58,10 +58,10 @@ docker compose up -d
 
 ## Sponsors
 
-This project is gracefully funded by:
+This project is kindly funded and supported by:
 
-<a href="https://media-tech-lab.com">Media Tech Lab by Media Lab Bayern</a>
+<a href="https://media-tech-lab.com">Media Tech Lab by Media Lab Bayern</a> (<a href="https://github.com/media-tech-lab">@media-tech-lab</a>)
 
 <a href="https://media-tech-lab.com">
-    <img src="https://user-images.githubusercontent.com/40501887/223163776-2b549037-6106-4c1d-a4eb-078b94da1831.png" width="70" title="Media Lab logo">
+    <img src="https://github.com/media-tech-lab/.github/blob/main/assets/mtl-powered-by.png" width="240" title="Media Tech Lab powered by logo">
 </a>
