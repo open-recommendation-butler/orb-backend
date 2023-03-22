@@ -85,7 +85,7 @@ class SearchView(APIView):
     # Paginate search
     query = query[(page-1)*count:page*count]
     query = query.highlight('teaser', number_of_fragments=1, pre_tags="<em class='font-bold'>", post_tags="</em>", fragment_size=240, boundary_scanner_locale='de-DE')
-    query = query.highlight('fulltext', number_of_fragments=1, pre_tags="<em class='font-bold'>", post_tags="</em>", fragment_size=240, boundary_scanner_locale='de-DE')
+    query = query.highlight('fulltext', number_of_fragments=5, pre_tags="<em class='font-bold'>", post_tags="</em>", fragment_size=350, boundary_scanner_locale='de-DE')
     
     response = query.execute()
     query = list(query)
