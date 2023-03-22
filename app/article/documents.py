@@ -54,7 +54,7 @@ class Article(Document):
         query[0].occurences += 1
         query[0].save()
       else:
-        s = Suggestion(name=keyword, occurences=1, embedding=list(settings.MODEL.encode(keyword)))
+        s = Suggestion(name=keyword, occurences=1)
         s.save()
 
   class Index:
