@@ -64,8 +64,7 @@ services:
       - "9200:9200"
     environment:
       - node.name=es01
-      - cluster.name=docker-cluster
-      - cluster.initial_master_nodes=es01
+      - discovery.type=single-node
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - bootstrap.memory_lock=true
       - xpack.security.enabled=true
