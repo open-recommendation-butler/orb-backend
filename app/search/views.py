@@ -12,8 +12,6 @@ from rest_framework.exceptions import ValidationError
 from collections import Counter
 from django.conf import settings
 
-CONTENT_TYPES = ['all', 'article', 'podcast']
-
 class SearchView(APIView):
   permission_classes = [permissions.AllowAny]
   
@@ -33,10 +31,6 @@ class SearchView(APIView):
       as_topics = request.GET.get('as_topics', "true").lower() == "true"
 
     count = int(request.GET.get('count', 20))
-
-    # Default to "article" as content type if no valid content type is provided
-    if content_type not in CONTENT_TYPES:
-      raise ValidationError(f"'content_type' parameter must be one of the following: {', '.join(CONTENT_TYPES)}.")
     
     page = request.GET.get('page', 1)
 
