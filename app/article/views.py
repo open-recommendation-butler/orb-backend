@@ -32,13 +32,18 @@ class ArticleView(APIView):
 
   def save(self, entry):
     # Create a new article document and save it to the ElasticSearch database
+    try:
+      created = dateparser.parse(entry.get("created"))
+    except TypeError:
+      created = None
+    
     a = Article(
       org_id=entry.get("org_id"),
       title=entry.get("title"),
       teaser=entry.get("teaser"),
       fulltext=entry.get("fulltext"),
       url=entry.get("url"),
-      created=dateparser.parse(entry.get("created")),
+      created=created,
       content_type=entry.get("content_type"),
       portal=entry.get("portal"),
       category=entry.get("category"),
