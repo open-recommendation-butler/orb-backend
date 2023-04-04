@@ -30,7 +30,7 @@ class SearchView(APIView):
 
     as_topics = False
     if content_type == 'all' and not publisher and settings.USE_TOPIC_MODELING:
-      as_topics = request.GET.get('as_topics', True)
+      as_topics = request.GET.get('as_topics', "true").lower() == "true"
 
     count = int(request.GET.get('count', 20))
 
