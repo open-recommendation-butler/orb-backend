@@ -46,6 +46,14 @@ class ArticleView(APIView):
       keywords=entry.get("keywords")
     )
 
+    # Calculate keywords if none present
+    if not a.keywords:
+      a.keywords = get_keywords(
+        "\n\n".join(
+          [x[:1000] for x in (a.title, a.teaser, a.fulltext) if x]
+        )
+      )
+
     # Optionally add embedding for topic modeling
     if settings.USE_TOPIC_MODELING:
       # Add the embedding
@@ -59,13 +67,6 @@ class ArticleView(APIView):
 
       # Model topic
       find_topic(a)
-
-    # Calculate keywords if none present
-    a.keywords = get_keywords(
-      "\n\n".join(
-        [x[:1000] for x in (a.title, a.teaser, a.fulltext) if x]
-      )
-    )
 
     # Save the article
     a.save()
