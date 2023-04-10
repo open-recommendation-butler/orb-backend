@@ -17,7 +17,7 @@ RUN mkdir $APP_HOME
 RUN mkdir $APP_HOME/staticfiles
 
 # Copy project
-COPY ./app $APP_HOME
+COPY ./src $APP_HOME
 
 WORKDIR $APP_HOME
 
