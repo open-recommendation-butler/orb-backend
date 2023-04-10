@@ -91,11 +91,12 @@ services:
   django:
     build: 
       context: .
-      dockerfile: ./app/Dockerfile
+      dockerfile: ./src/Dockerfile
     command: >
       bash -c '
         USE_TOPIC_MODELING=False python manage.py shell < article/helpers/create_index.py;
         USE_TOPIC_MODELING=False python manage.py migrate;
+        USE_TOPIC_MODELING=False python manage.py createsuperuser --noinput --username root --email test@test.com;
         python manage.py runserver 0.0.0.0:8000;
       '
     env_file:
