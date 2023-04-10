@@ -32,13 +32,18 @@ class ArticleView(APIView):
 
   def save(self, entry):
     # Create a new article document and save it to the ElasticSearch database
+    try:
+      created = dateparser.parse(entry.get("created"))
+    except TypeError:
+      created = None
+    
     a = Article(
       org_id=entry.get("org_id"),
       title=entry.get("title"),
       teaser=entry.get("teaser"),
       fulltext=entry.get("fulltext"),
       url=entry.get("url"),
-      created=dateparser.parse(entry.get("created")),
+      created=created,
       content_type=entry.get("content_type"),
       portal=entry.get("portal"),
       category=entry.get("category"),
@@ -54,17 +59,16 @@ class ArticleView(APIView):
         )
       )
 
-    # Optionally add embedding for topic modeling
-    if settings.USE_TOPIC_MODELING:
-      # Add the embedding
-      a.embedding = list(
-        settings.MODEL.encode(
-          "\n\n".join(
-              [x for x in (a.title, a.teaser, a.fulltext) if x]
-            )
-        )
+    # Add the embedding
+    a.embedding = list(
+      settings.MODEL.encode(
+        "\n\n".join(
+            [x for x in (a.title, a.teaser, a.fulltext) if x]
+          )
       )
+    )
 
+    if settings.USE_TOPIC_MODELING and not entry.get("disable_topic_modeling"):
       # Model topic
       find_topic(a)
 

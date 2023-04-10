@@ -12,12 +12,11 @@ from rest_framework.exceptions import ValidationError
 from collections import Counter
 from django.conf import settings
 
-CONTENT_TYPES = ['all', 'article', 'podcast']
-
 class SearchView(APIView):
   permission_classes = [permissions.AllowAny]
   
   def get(self, request, format=None):
+
     ### Get parameters ###
 
     queryString = request.GET.get('q')
@@ -30,13 +29,9 @@ class SearchView(APIView):
 
     as_topics = False
     if content_type == 'all' and not publisher and settings.USE_TOPIC_MODELING:
-      as_topics = request.GET.get('as_topics', True)
+      as_topics = request.GET.get('as_topics', "true").lower() == "true"
 
     count = int(request.GET.get('count', 20))
-
-    # Default to "article" as content type if no valid content type is provided
-    if content_type not in CONTENT_TYPES:
-      raise ValidationError(f"'content_type' parameter must be one of the following: {', '.join(CONTENT_TYPES)}.")
     
     page = request.GET.get('page', 1)
 
@@ -68,11 +63,32 @@ class SearchView(APIView):
       )
     else:
       query = Article.search()
-      query = query.query(
-        'bool', 
-        must=[Q('multi_match', query=queryString, fields=['title^3', 'teaser^2', 'fulltext'])],
-        should=[Q('distance_feature', field="created", pivot="100d", origin="now", boost=15)]
-      )
+      if request.GET.get('semantic_search', "false").lower() == "true":
+        query_vector = settings.MODEL.encode(queryString)
+        query = query.from_dict({
+          "min_score": 1.2,
+          "query": {
+            "script_score": {
+              "query" : {
+                "match_all" : {}
+              },
+              "script": {
+                "source" : "doc['embedding'].size() == 0 ? 0 : cosineSimilarity(params.queryVector, 'embedding') + 1.0",
+                "params": {
+                  "queryVector": query_vector.tolist()
+                }
+              }
+            }
+          }
+        })
+        response = query.execute()
+        return Response(ArticleSerializer(response, many=True).data)
+      else:
+        query = query.query(
+          'bool',
+          must=[Q('multi_match', query=queryString, fields=['title^3', 'teaser^2', 'fulltext'])],
+          should=[Q('distance_feature', field="created", pivot="100d", origin="now", boost=15)]
+        )
       if content_type != 'all':
         query = query.filter('term', content_type=content_type)
       
@@ -86,7 +102,6 @@ class SearchView(APIView):
     query = query[(page-1)*count:page*count]
     query = query.highlight('teaser', number_of_fragments=1, pre_tags="<em class='font-bold'>", post_tags="</em>", fragment_size=240, boundary_scanner_locale='de-DE')
     query = query.highlight('fulltext', number_of_fragments=5, pre_tags="<em class='font-bold'>", post_tags="</em>", fragment_size=350, boundary_scanner_locale='de-DE')
-    
     response = query.execute()
     query = list(query)
 

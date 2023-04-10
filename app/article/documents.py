@@ -31,10 +31,7 @@ class Article(Document):
   word_count = Integer()
   is_news_agency = Boolean()
   keywords = Keyword()
-  embedding = DenseVector(
-    dims=768,
-    multi=True
-  )
+  embedding = DenseVector(dims=768)
 
   def save(self):
     super().save()

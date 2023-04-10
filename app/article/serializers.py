@@ -12,6 +12,10 @@ class ArticleSerializer(serializers.Serializer):
   url = serializers.URLField(required=False)
   created = serializers.DateTimeField(required=False)
   highlights = serializers.SerializerMethodField()
+  score = serializers.SerializerMethodField()
+
+  def get_score(self, obj):
+    return obj.meta.score
 
   def get_highlights(self, obj):
     highlights = []
@@ -56,6 +60,9 @@ class ArticleSerializer(serializers.Serializer):
       try:
         highlights.append({"highlight": obj.meta.highlight.teaser[0]})
       except AttributeError:
-        highlights.append({"highlight": obj.teaser})
+        try:
+          highlights.append({"highlight": obj.teaser})
+        except AttributeError:
+          highlights.append({"highlight": obj.fulltext[:280]})
     
     return highlights
