@@ -28,7 +28,7 @@ class SearchView(APIView):
     publisher = request.GET.get('publisher')
 
     as_topics = False
-    if content_type == 'all' and not publisher and settings.USE_TOPIC_MODELING:
+    if content_type == 'all' and not publisher:
       as_topics = request.GET.get('as_topics', "true").lower() == "true"
 
     count = int(request.GET.get('count', 20))
@@ -63,10 +63,12 @@ class SearchView(APIView):
       )
     else:
       query = Article.search()
+
+
       if request.GET.get('semantic_search', "false").lower() == "true":
         query_vector = settings.MODEL.encode(queryString)
         query = query.from_dict({
-          "min_score": 1.2,
+          "min_score": settings.SEMANTIC_SEARCH_MIN_COSINE_SIMILARITY + 1.0,
           "query": {
             "script_score": {
               "query" : {
