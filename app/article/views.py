@@ -59,17 +59,16 @@ class ArticleView(APIView):
         )
       )
 
-    # Optionally add embedding for topic modeling
-    if settings.USE_TOPIC_MODELING:
-      # Add the embedding
-      a.embedding = list(
-        settings.MODEL.encode(
-          "\n\n".join(
-              [x for x in (a.title, a.teaser, a.fulltext) if x]
-            )
-        )
+    # Add the embedding
+    a.embedding = list(
+      settings.MODEL.encode(
+        "\n\n".join(
+            [x for x in (a.title, a.teaser, a.fulltext) if x]
+          )
       )
+    )
 
+    if settings.USE_TOPIC_MODELING and not entry.get("disable_topic_modeling"):
       # Model topic
       find_topic(a)
 
