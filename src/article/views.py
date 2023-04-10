@@ -11,8 +11,10 @@ from article.helpers.get_keywords import get_keywords
 
 class ArticleView(APIView):
   """
-  Retrieve, update or delete an article instance.
+  Retrieve, save or delete an article instance.
   """
+
+
   def get_object(self, org_id):
     query = Article.search()
     query = query.filter('term', org_id=org_id)
@@ -20,8 +22,8 @@ class ArticleView(APIView):
     query = list(query)
     if query:
       return query[0]
-
     return None
+
 
   def get(self, request, org_id, format=None):
     a = self.get_object(org_id)
@@ -29,6 +31,7 @@ class ArticleView(APIView):
       raise Http404
     serializer = ArticleSerializer(a)
     return Response(serializer.data)
+
 
   def save(self, entry):
     # Create a new article document and save it to the ElasticSearch database
@@ -68,12 +71,13 @@ class ArticleView(APIView):
       )
     )
 
-    if settings.USE_TOPIC_MODELING and not entry.get("disable_topic_modeling"):
+    if not entry.get("disable_topic_modeling"):
       # Model topic
       find_topic(a)
 
     # Save the article
     a.save()
+
 
   def post(self, request, format=None):
 
