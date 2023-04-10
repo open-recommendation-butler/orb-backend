@@ -174,3 +174,5 @@ if LOAD_LANGUAGE_MODEL:
     print("Loading language model.")
     MODEL = SentenceTransformer(env("LANGUAGE_MODEL", default='T-Systems-onsite/cross-en-de-roberta-sentence-transformer'))
     print("Language model loaded.")
+
+SEMANTIC_SEARCH_MIN_COSINE_SIMILARITY = 0.3
