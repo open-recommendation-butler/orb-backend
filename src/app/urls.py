@@ -14,7 +14,6 @@ urlpatterns = [
     path("portal/", include('portal.urls')),
     path("topic/", include('topic.urls')),
     path("suggestion/", include('suggestion.urls')),
-    path("logger/", include('logger.urls')),
     path('search/', include('search.urls')),
     path('api-auth/', include('rest_framework.urls')),
     path('api-token-auth/', views.obtain_auth_token)
