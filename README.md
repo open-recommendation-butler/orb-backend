@@ -48,14 +48,9 @@ SECRET_KEY=YourStrongSecretKeyForDjango
 DEBUG=True
 ```
 
-- Compose the docker
+- Compose and build the docker
 ```bash
-docker compose build
-```
-
-- Compose the docker
-```bash
-docker compose up
+docker compose up --build
 ```
 
 - Test if ORB is running by visiting [http://localhost:8000](http://localhost:8000).
