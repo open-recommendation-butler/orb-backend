@@ -158,10 +158,9 @@ if env("REQUIRE_AUTHENTICATION", default=False):
     ]
 
 connections.create_connection(
-    hosts=['https://es01:9200/'], 
-    #hosts=['https://localhost:9200'], 
+    hosts=[env("ELASTICSEARCH_ADRESS", default='https://es01:9200/')],
     timeout=60,
-    ca_certs='/usr/share/elasticsearch/config/certs/ca/ca.crt', 
+    ca_certs=env("CERT_PATH", default='/usr/share/elasticsearch/config/certs/ca/ca.crt'),
     http_auth=("elastic", env("ELASTIC_PASSWORD"))
 )
 
