@@ -141,3 +141,5 @@ app/dscan.py
 web-gui/node_modules/
 
 .htpasswd
+
+certs/
