@@ -12,10 +12,6 @@ class ArticleSerializer(serializers.Serializer):
   url = serializers.URLField(required=False)
   created = serializers.DateTimeField(required=False)
   highlights = serializers.SerializerMethodField()
-  score = serializers.SerializerMethodField()
-
-  def get_score(self, obj):
-    return obj.meta.score
 
   def get_highlights(self, obj):
     highlights = []
