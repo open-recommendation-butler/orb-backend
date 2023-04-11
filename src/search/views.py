@@ -88,7 +88,7 @@ class SearchView(APIView):
       else:
         query = query.query(
           'bool',
-          must=[Q('multi_match', query=queryString, fields=['title^3', 'teaser^2', 'fulltext'])],
+          must=[Q('multi_match', query=queryString, fields=['title^3', 'teaser^2', 'fulltext'], fuzziness="AUTO")],
           should=[Q('distance_feature', field="created", pivot="100d", origin="now", boost=15)]
         )
       if content_type != 'all':
