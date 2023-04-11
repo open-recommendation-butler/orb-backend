@@ -16,13 +16,13 @@ You can start ORB on your machine with docker by following these steps:
 - Clone the repository
 
 ```bash
-git clone https://github.com/open-recommendation-butler/ORB.git
+git clone https://github.com/open-recommendation-butler/orb-backend.git
 ```
 
 - Change directory to project directory
 
 ```bash
-cd ORB
+cd orb-backend
 ```
 
 - Create a file with the name ".env".
@@ -38,8 +38,14 @@ ELASTIC_PASSWORD=YourStrongPasswordForElasticSearch
 # Password for the 'kibana_system' user (at least 6 characters)
 KIBANA_PASSWORD=YourStrongPasswordForKibana
 
+# Password for the 'root' admin of ORB
+DJANGO_SUPERUSER_PASSWORD=YourStrongAdminPassword
+
 # Secret key for Django (at least 6 characters)
 SECRET_KEY=YourStrongSecretKeyForDjango
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG=True
 ```
 
 - Compose the docker
@@ -49,12 +55,12 @@ docker compose build
 
 - Compose the docker
 ```bash
-docker compose up -d
+docker compose up
 ```
 
 - Test if ORB is running by visiting [http://localhost:8000](http://localhost:8000).
 
-<a href="https://open-recommendation-butler.github.io/Docs/">For more see full documentation here.</a>
+<a href="https://open-recommendation-butler.github.io/orb-docs/">📑 For more see full documentation here</a>
 
 ## Sponsors
 
