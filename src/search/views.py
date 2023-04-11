@@ -97,9 +97,16 @@ class SearchView(APIView):
       if publisher:
         query = query.filter('term', portal=publisher)
       
+      if publisher != 'OMR Podcast':
+        query = query.query('bool', must=~Q("term", content_type="product"))
+        query = query.query('bool', must=~Q("term", content_type="review"))
+        query = query.query('bool', must=~Q("term", content_type="category"))
+        query = query.query('bool', must=~Q("term", content_type="omr_article"))
+      
     if category:
       query = query.filter('term', category=category)
 
+    query = query.source(exclude=["fulltext"])
     # Paginate search
     query = query[(page-1)*count:page*count]
     query = query.highlight('teaser', number_of_fragments=1, pre_tags="<em class='font-bold'>", post_tags="</em>", fragment_size=240, boundary_scanner_locale='de-DE')
