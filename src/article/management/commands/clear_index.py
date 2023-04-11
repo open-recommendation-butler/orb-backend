@@ -2,7 +2,6 @@ from django.core.management.base import BaseCommand
 from article.documents import Article
 from topic.documents import Topic
 from suggestion.documents import Suggestion
-from logger.documents import Logger
 from elasticsearch_dsl import Index
 from elasticsearch.exceptions import NotFoundError
 
@@ -16,7 +15,7 @@ class Command(BaseCommand):
     self.stdout.write(
       "Removing all documents from your index because you said so."
     )
-    for index_name in ('article', 'topic', 'suggestion', 'logger'):
+    for index_name in ('article', 'topic', 'suggestion'):
       try:
         index = Index(index_name)
         index.delete()
@@ -27,7 +26,6 @@ class Command(BaseCommand):
     Article.init()
     Topic.init()
     Suggestion.init()
-    Logger.init()
     self.stdout.write(
-      'Done: Successfully recreated "article", "topic", "suggestion" and "logger" index.'
+      'Done: Successfully recreated "article", "topic", and "suggestion" index.'
     )
